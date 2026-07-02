@@ -23,10 +23,16 @@
   /* layout */
   .layout{display:flex;min-height:100vh;}
   .sidebar{
-    width:290px;flex:0 0 290px;background:var(--card);border-right:1px solid var(--line);
-    padding:22px 12px;height:100vh;position:sticky;top:0;overflow-y:auto;
+    width:288px;flex:0 0 288px;
+    background:rgba(255,255,255,.62);
+    -webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%);
+    border-right:1px solid rgba(0,0,0,.06);
+    padding:20px 14px;height:100vh;position:sticky;top:0;overflow-y:auto;
   }
-  .navBrand{font-size:18px;font-weight:700;letter-spacing:-.02em;padding:2px 10px 16px;}
+  .navBrand{font-size:19px;font-weight:800;letter-spacing:-.02em;padding:2px 10px 4px;}
+  .navBrandSub{font-size:12px;color:var(--muted);padding:0 10px 16px;font-weight:500;}
+  .navLabel{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--muted);padding:16px 12px 6px;}
   .main{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;padding:24px 16px 60px;}
   .main-inner{width:100%;max-width:600px;}
   .backdrop{display:none;}
@@ -42,21 +48,26 @@
   .navItem .navName{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .navItem.sub{padding-left:30px;font-weight:450;font-size:13.5px;}
   .cnt{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;flex:0 0 auto;}
-  .navHead{display:flex;align-items:center;gap:8px;width:100%;border:none;
-    text-align:left;padding:10px 12px;border-radius:12px;font-size:14px;font-weight:700;
-    background:var(--cbg,#f0f0f3);color:var(--cink,var(--ink));cursor:pointer;font-family:inherit;margin-top:6px;
-    transition:filter .15s ease;}
-  .navHead:hover{filter:brightness(.965);}
+  .navHead{display:flex;align-items:center;gap:9px;width:100%;border:none;
+    text-align:left;padding:10px 12px;border-radius:13px;font-size:14px;font-weight:700;
+    background:color-mix(in srgb,var(--cdot,#bbb) 12%,transparent);
+    color:color-mix(in srgb,var(--cdot,#bbb) 58%,#0d0d10);
+    cursor:pointer;font-family:inherit;margin-top:5px;transition:background .16s ease;}
+  .navHead:hover{background:color-mix(in srgb,var(--cdot,#bbb) 20%,transparent);}
+  .navHead.open{background:color-mix(in srgb,var(--cdot,#bbb) 17%,transparent);}
   .navHead .navDot{width:9px;height:9px;border-radius:50%;background:var(--cdot,#bbb);flex:0 0 auto;
-    box-shadow:0 0 0 3px color-mix(in srgb,var(--cdot,#bbb) 22%, transparent);}
+    box-shadow:0 0 0 3px color-mix(in srgb,var(--cdot,#bbb) 24%,transparent);}
   .navHead .navName{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .navHead .cnt{color:var(--cink,var(--muted));opacity:.7;}
-  .chev{font-size:9px;color:var(--cink,var(--muted));opacity:.65;transition:transform .2s ease;display:inline-block;width:9px;}
+  .navHead .cnt{color:currentColor;opacity:.6;}
+  .chev{font-size:9px;color:currentColor;opacity:.5;transition:transform .2s ease;display:inline-block;width:9px;}
   .navHead.open .chev{transform:rotate(90deg);}
-  .navChildren{display:none;margin:2px 0 4px 16px;padding-left:8px;border-left:2px solid var(--cdot,#e0e0e0);}
+  .navChildren{display:none;margin:3px 0 6px 17px;padding-left:9px;
+    border-left:2px solid color-mix(in srgb,var(--cdot,#ccc) 32%,transparent);}
   .navChildren.open{display:block;animation:fade .2s ease;}
-  .navChildren .navItem.active{background:var(--cbg,var(--blue-tint));color:var(--cink,var(--blue));}
-  .navChildren .navItem.active .cnt{color:var(--cink,var(--blue));}
+  .navChildren .navItem.active{
+    background:color-mix(in srgb,var(--cdot,#bbb) 18%,transparent);
+    color:color-mix(in srgb,var(--cdot,#bbb) 60%,#0d0d10);}
+  .navChildren .navItem.active .cnt{color:currentColor;opacity:.7;}
   @keyframes fade{from{opacity:0;}to{opacity:1;}}
 
   /* top bar (main) */
@@ -223,6 +234,7 @@
   /* mobile: sidebar becomes a slide-in drawer */
   @media(max-width:900px){
     .sidebar{position:fixed;top:0;left:0;height:100%;transform:translateX(-100%);
+      background:rgba(255,255,255,.9);
       transition:transform .25s ease;z-index:60;box-shadow:0 0 50px rgba(0,0,0,.25);}
     .sidebar.open{transform:none;}
     .backdrop{display:block;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:55;
@@ -236,6 +248,7 @@
 <div class="layout">
   <aside class="sidebar" id="sidebar">
     <div class="navBrand">🩺 Dermatologie</div>
+    <div class="navBrandSub">Flashcards clinice</div>
     <div id="nav"></div>
   </aside>
   <div class="backdrop" id="backdrop" onclick="closeSidebar()"></div>
@@ -353,6 +366,8 @@ function updateMistakeBtn(){
 
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function shortCourse(n){return n.replace(/^Cursul\s*/i,"");}
+function courseNum(n){const m=n.match(/Cursul\s*(\d+)/i);return m?parseInt(m[1],10):999;}
+function sortedCourses(){return [...new Set(manifest.map(m=>m.course))].sort((a,b)=>courseNum(a)-courseNum(b));}
 
 /* ---------- sidebar ---------- */
 function filterKey(f){
@@ -383,16 +398,19 @@ function buildSidebar(){
   nav.appendChild(sep);
   nav.appendChild(makeLeaf('🗂️ Toate cursurile',manifest.length,{type:'all'},false));
 
-  const courses=[...new Set(manifest.map(m=>m.course))];
+  const label=document.createElement('div');label.className='navLabel';label.textContent='Cursuri';
+  nav.appendChild(label);
+
+  const courses=sortedCourses();
   COURSE_ORDER=courses.slice();
   courses.forEach(c=>{
     const imgs=manifest.filter(m=>m.course===c);
-    const col=courseColor(c);
+    const accent=courseColor(c);
     const head=document.createElement('button');head.className='navHead';
-    head.style.cssText=`--cbg:${col.bg};--cdot:${col.dot};--cink:${col.ink};`;
+    head.style.setProperty('--cdot',accent);
     head.innerHTML=`<span class="chev">▶</span><span class="navDot"></span><span class="navName">${shortCourse(c)}</span><span class="cnt">${imgs.length}</span>`;
     const children=document.createElement('div');children.className='navChildren';
-    children.style.cssText=`--cbg:${col.bg};--cdot:${col.dot};--cink:${col.ink};`;
+    children.style.setProperty('--cdot',accent);
     head.onclick=()=>{const open=children.classList.toggle('open');head.classList.toggle('open',open);};
 
     children.appendChild(makeLeaf('Tot cursul',imgs.length,{type:'course',course:c},true));
@@ -468,19 +486,8 @@ function updateScore(){
 }
 function hideScreens(){["home","combine","gallery","card","empty","finish","mistakes"].forEach(id=>document.getElementById(id).style.display="none");}
 
-const PALETTE=[
-  {bg:'#ffeef0',dot:'#ff6b81',ink:'#b5384b'},
-  {bg:'#fff2e6',dot:'#ff9f43',ink:'#a85e18'},
-  {bg:'#fff8de',dot:'#e6b800',ink:'#8a6d00'},
-  {bg:'#e9f9ef',dot:'#26de81',ink:'#1a7a48'},
-  {bg:'#e3f9f5',dot:'#20bdaa',ink:'#0f766b'},
-  {bg:'#e8f4fd',dot:'#45aaf2',ink:'#1b6ca8'},
-  {bg:'#eef1fe',dot:'#5b7cf0',ink:'#2b47a8'},
-  {bg:'#f0ecff',dot:'#7d5fff',ink:'#4b34c9'},
-  {bg:'#f7ecfd',dot:'#a55eea',ink:'#7231b0'},
-  {bg:'#ffeef7',dot:'#fd79a8',ink:'#bd3f72'},
-  {bg:'#f2eeea',dot:'#b08968',ink:'#75543a'},
-];
+// accent colors only; pale backgrounds + tinted ink are derived via color-mix
+const PALETTE=['#ff7a86','#ff9f45','#e7b008','#54c98a','#20bcac','#3fb0ef','#5b8def','#8a7bf0','#b06cf0','#ec6fa6','#b08968'];
 let COURSE_ORDER=[];
 function courseColor(course){
   const i=COURSE_ORDER.indexOf(course);
@@ -515,7 +522,7 @@ function openCombine(){
 }
 function buildCombineGrid(){
   const grid=document.getElementById("cmbGrid");grid.innerHTML="";
-  const courses=[...new Set(manifest.map(m=>m.course))];
+  const courses=sortedCourses();
   courses.forEach(c=>{
     const n=manifest.filter(m=>m.course===c).length;
     const card=document.createElement("button");
@@ -537,7 +544,7 @@ function updateCombineFooter(){
   document.getElementById("cmbAll").textContent=combineSel.size===total?"Deselectează tot":"Selectează tot";
 }
 function toggleAllCombine(){
-  const courses=[...new Set(manifest.map(m=>m.course))];
+  const courses=sortedCourses();
   if(combineSel.size===courses.length)combineSel.clear();else courses.forEach(c=>combineSel.add(c));
   buildCombineGrid();
 }
