@@ -157,6 +157,49 @@
   .mActions{display:flex;gap:10px;}
   .mActions .bigBtn{margin-bottom:0;}
 
+  /* home screen */
+  #home{text-align:center;padding:10px 0 20px;animation:pop .4s cubic-bezier(.2,.8,.2,1);}
+  .hero{background:var(--card);border-radius:26px;box-shadow:var(--shadow);padding:40px 26px 32px;
+    position:relative;overflow:hidden;}
+  .hero::before{content:"";position:absolute;top:-90px;left:50%;transform:translateX(-50%);
+    width:320px;height:200px;border-radius:50%;
+    background:radial-gradient(circle,rgba(0,113,227,.16),rgba(52,199,89,.10) 55%,transparent 72%);
+    filter:blur(6px);animation:float 6s ease-in-out infinite;pointer-events:none;}
+  @keyframes float{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(14px);}}
+  .heroIcon{font-size:52px;line-height:1;margin-bottom:12px;position:relative;}
+  .heroTitle{font-size:28px;font-weight:800;letter-spacing:-.03em;margin:0 0 6px;position:relative;}
+  .heroSub{color:var(--muted);font-size:16px;margin:0 0 24px;position:relative;}
+  .stats{display:flex;justify-content:center;gap:10px;margin-bottom:26px;position:relative;}
+  .stat{flex:1;max-width:120px;background:#f5f5f7;border-radius:16px;padding:14px 8px;}
+  .statN{display:block;font-size:24px;font-weight:800;letter-spacing:-.02em;}
+  .statL{font-size:12px;color:var(--muted);}
+  .homeBtns{display:flex;flex-direction:column;gap:10px;max-width:360px;margin:0 auto;position:relative;}
+  .homeBtns .bigBtn{margin-bottom:0;}
+  .homeHint{margin-top:18px;color:var(--muted);font-size:13px;position:relative;}
+
+  /* combine screen */
+  #combine{background:var(--card);border-radius:24px;box-shadow:var(--shadow);padding:20px;
+    animation:pop .35s cubic-bezier(.2,.8,.2,1);}
+  .cmbHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+  .cmbHint{color:var(--muted);font-size:14px;margin:0 2px 16px;line-height:1.45;}
+  .cmbGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+  .cmbCard{position:relative;display:flex;flex-direction:column;gap:2px;text-align:left;
+    border:1.5px solid var(--line);border-radius:16px;padding:13px 14px;cursor:pointer;
+    background:#fafafa;font-family:inherit;transition:border-color .15s,background .15s,transform .06s;}
+  .cmbCard:hover{background:#f0f0f3;}
+  .cmbCard:active{transform:scale(.98);}
+  .cmbCard.sel{border-color:var(--blue);background:var(--blue-tint);}
+  .cmbName{font-size:14px;font-weight:600;color:var(--ink);padding-right:22px;}
+  .cmbCnt{font-size:12px;color:var(--muted);}
+  .cmbCheck{position:absolute;top:11px;right:11px;width:20px;height:20px;border-radius:50%;
+    background:var(--blue);color:#fff;font-size:12px;display:none;align-items:center;justify-content:center;}
+  .cmbCard.sel .cmbCheck{display:flex;}
+  .cmbFooter{display:flex;align-items:center;gap:12px;}
+  .cmbCount{flex:1;font-size:14px;font-weight:600;color:var(--muted);}
+  .cmbFooter .bigBtn{margin-bottom:0;width:auto;padding:13px 26px;}
+  .linkBtn{background:none;border:none;color:var(--blue);font-size:13px;font-weight:600;
+    cursor:pointer;font-family:inherit;margin-top:12px;padding:4px;}
+
   /* mobile: sidebar becomes a slide-in drawer */
   @media(max-width:900px){
     .sidebar{position:fixed;top:0;left:0;height:100%;transform:translateX(-100%);
@@ -183,6 +226,39 @@
         <button class="hamb" onclick="openSidebar()" aria-label="meniu">☰</button>
         <div class="scopeTitle" id="scopeTitle">Toate cursurile</div>
         <button id="mistakesBtn" onclick="openMistakes()">⚑ Greșeli <span id="mCount">0</span></button>
+      </div>
+
+      <div id="home">
+        <div class="hero">
+          <div class="heroIcon">🩺</div>
+          <h1 class="heroTitle">Flashcards Dermatologie</h1>
+          <p class="heroSub">Antrenează-ți ochiul clinic</p>
+          <div class="stats">
+            <div class="stat"><span class="statN" id="stImgs">0</span><span class="statL">imagini</span></div>
+            <div class="stat"><span class="statN" id="stCourses">0</span><span class="statL">cursuri</span></div>
+            <div class="stat"><span class="statN" id="stDx">0</span><span class="statL">diagnostice</span></div>
+          </div>
+          <div class="homeBtns">
+            <button class="bigBtn primary" onclick="selectFilter({type:'all'})">▶︎ Start rapid · toate cursurile</button>
+            <button class="bigBtn ghost" onclick="openCombine()">🎚️ Combină cursuri</button>
+            <button class="bigBtn ghost" id="homeReviewBtn" style="display:none" onclick="startReview()">⚑ Exersează greșelile (<span id="homeMCount">0</span>)</button>
+          </div>
+          <div class="homeHint">sau alege un curs / o boală din meniul din stânga</div>
+        </div>
+      </div>
+
+      <div id="combine" style="display:none">
+        <div class="cmbHead">
+          <span class="mTitle">🎚️ Combină cursuri</span>
+          <button class="xBtn" onclick="showHome()">✕</button>
+        </div>
+        <p class="cmbHint">Alege cursurile pe care vrei să le amesteci — pozele lor se combină într-un singur test.</p>
+        <div class="cmbGrid" id="cmbGrid"></div>
+        <div class="cmbFooter">
+          <span id="cmbCount" class="cmbCount">0 cursuri · 0 poze</span>
+          <button class="bigBtn primary" id="cmbStart" onclick="startCombine()" disabled>Începe</button>
+        </div>
+        <button class="linkBtn" id="cmbAll" onclick="toggleAllCombine()">Selectează tot</button>
       </div>
 
       <div id="scoreRow"><span id="scoreTxt">Scor 0 / 0</span><span id="remainTxt"></span></div>
@@ -263,8 +339,19 @@ function makeLeaf(label,count,f,sub){
   b.onclick=()=>{selectFilter(f);closeSidebar();};
   return b;
 }
+function makeAction(label,onclick){
+  const b=document.createElement('button');
+  b.className='navItem';
+  b.innerHTML=`<span class="navName">${label}</span>`;
+  b.onclick=()=>{onclick();};
+  return b;
+}
 function buildSidebar(){
   const nav=document.getElementById('nav');nav.innerHTML='';
+  nav.appendChild(makeAction('🏠 Acasă',showHome));
+  nav.appendChild(makeAction('🎚️ Combină cursuri',openCombine));
+  const sep=document.createElement('div');sep.style.cssText='height:1px;background:var(--line);margin:8px 10px;';
+  nav.appendChild(sep);
   nav.appendChild(makeLeaf('🗂️ Toate cursurile',manifest.length,{type:'all'},false));
 
   const courses=[...new Set(manifest.map(m=>m.course))];
@@ -287,6 +374,7 @@ function buildSidebar(){
 function scopeLabel(){
   if(filter.type==='all')return 'Toate cursurile';
   if(filter.type==='course')return shortCourse(filter.course);
+  if(filter.type==='combine')return `Mix · ${filter.courses.length} cursuri`;
   return filter.disease;
 }
 function selectFilter(f){
@@ -312,6 +400,7 @@ function closeSidebar(){document.getElementById('sidebar').classList.remove('ope
 function currentSet(){
   if(filter.type==='all')return manifest.slice();
   if(filter.type==='course')return manifest.filter(m=>m.course===filter.course);
+  if(filter.type==='combine')return manifest.filter(m=>filter.courses.includes(m.course));
   return manifest.filter(m=>m.course===filter.course&&m.disease===filter.disease);
 }
 function resolveMistakeCards(){return Object.keys(mistakes).map(f=>manifest.find(m=>m.file===f)).filter(Boolean);}
@@ -324,14 +413,76 @@ function updateScore(){
   const done=sessionTotal-pool.length;
   document.getElementById("progBar").style.width=sessionTotal?(done/sessionTotal*100)+"%":"0%";
 }
-function hideScreens(){["card","empty","finish","mistakes"].forEach(id=>document.getElementById(id).style.display="none");}
+function hideScreens(){["home","combine","card","empty","finish","mistakes"].forEach(id=>document.getElementById(id).style.display="none");}
+function setChrome(on){
+  document.getElementById("scoreRow").style.display=on?"flex":"none";
+  document.getElementById("progWrap").style.display=on?"block":"none";
+}
+
+/* ---------- home ---------- */
+function showHome(){
+  hideScreens();setChrome(false);closeSidebar();
+  document.getElementById("scopeTitle").textContent="Acasă";
+  document.getElementById("stImgs").textContent=manifest.length;
+  document.getElementById("stCourses").textContent=new Set(manifest.map(m=>m.course)).size;
+  document.getElementById("stDx").textContent=new Set(manifest.map(m=>m.disease)).size;
+  const rb=document.getElementById("homeReviewBtn");
+  rb.style.display=mCount()?"block":"none";
+  document.getElementById("homeMCount").textContent=mCount();
+  document.querySelectorAll(".navItem").forEach(b=>b.classList.remove("active"));
+  document.getElementById("home").style.display="block";
+}
+
+/* ---------- combine courses ---------- */
+let combineSel=new Set();
+function openCombine(){
+  hideScreens();setChrome(false);closeSidebar();
+  document.getElementById("scopeTitle").textContent="Combină cursuri";
+  buildCombineGrid();
+  document.getElementById("combine").style.display="block";
+}
+function buildCombineGrid(){
+  const grid=document.getElementById("cmbGrid");grid.innerHTML="";
+  const courses=[...new Set(manifest.map(m=>m.course))];
+  courses.forEach(c=>{
+    const n=manifest.filter(m=>m.course===c).length;
+    const card=document.createElement("button");
+    card.className="cmbCard"+(combineSel.has(c)?" sel":"");
+    card.innerHTML=`<span class="cmbName">${shortCourse(c)}</span><span class="cmbCnt">${n} poze</span><span class="cmbCheck">✓</span>`;
+    card.onclick=()=>{
+      if(combineSel.has(c))combineSel.delete(c);else combineSel.add(c);
+      card.classList.toggle("sel");updateCombineFooter();
+    };
+    grid.appendChild(card);
+  });
+  updateCombineFooter();
+}
+function updateCombineFooter(){
+  const nImgs=manifest.filter(m=>combineSel.has(m.course)).length;
+  document.getElementById("cmbCount").textContent=`${combineSel.size} cursuri · ${nImgs} poze`;
+  document.getElementById("cmbStart").disabled=combineSel.size<1;
+  const total=new Set(manifest.map(m=>m.course)).size;
+  document.getElementById("cmbAll").textContent=combineSel.size===total?"Deselectează tot":"Selectează tot";
+}
+function toggleAllCombine(){
+  const courses=[...new Set(manifest.map(m=>m.course))];
+  if(combineSel.size===courses.length)combineSel.clear();else courses.forEach(c=>combineSel.add(c));
+  buildCombineGrid();
+}
+function startCombine(){
+  if(combineSel.size<1)return;
+  filter={type:"combine",courses:[...combineSel]};
+  document.querySelectorAll(".navItem").forEach(b=>b.classList.remove("active"));
+  document.getElementById("scopeTitle").textContent=scopeLabel();
+  resetAndStart();
+}
 
 function nextCard(){
   if(pool.length===0){
-    if(score.total===0){hideScreens();document.getElementById("empty").style.display="block";return;}
+    if(score.total===0){hideScreens();setChrome(false);document.getElementById("empty").style.display="block";return;}
     showFinish();return;
   }
-  hideScreens();
+  hideScreens();setChrome(true);
   document.getElementById("card").style.display="block";
   const card=document.getElementById("card");card.style.animation="none";void card.offsetWidth;card.style.animation="";
 
@@ -385,7 +536,7 @@ function answer(btn,chosen){
 }
 
 function showFinish(){
-  hideScreens();
+  hideScreens();setChrome(false);
   const pct=score.total?Math.round(score.correct/score.total*100):0;
   const wrong=score.total-score.correct;
   document.getElementById("finPct").textContent=pct+"%";
@@ -426,14 +577,17 @@ function renderMistakes(){
 }
 let lastScreen="card";
 function openMistakes(){
-  ["card","finish","empty"].forEach(id=>{if(document.getElementById(id).style.display==="block")lastScreen=id;});
-  hideScreens();renderMistakes();updateMistakeBtn();
+  ["home","card","finish","empty"].forEach(id=>{if(document.getElementById(id).style.display==="block")lastScreen=id;});
+  hideScreens();setChrome(false);renderMistakes();updateMistakeBtn();
   document.getElementById("mistakes").style.display="block";
 }
 function closeMistakes(){
   hideScreens();
+  if(lastScreen==="home"){showHome();return;}
+  const chrome=(lastScreen==="card"||lastScreen==="finish");
+  setChrome(chrome);
   const target=(lastScreen==="finish"||lastScreen==="empty")?lastScreen:(current?"card":null);
-  if(target)document.getElementById(target).style.display="block";else resetAndStart();
+  if(target)document.getElementById(target).style.display="block";else showHome();
 }
 function clearMistakes(){
   if(!confirm("Ștergi toate greșelile salvate?"))return;
@@ -443,7 +597,7 @@ document.getElementById("nextBtn").onclick=nextCard;
 
 loadMistakes();updateMistakeBtn();
 fetch("manifest.json").then(r=>r.json()).then(data=>{
-  manifest=data;buildSidebar();selectFilter({type:'all'});
+  manifest=data;buildSidebar();showHome();
 }).catch(err=>{
   document.getElementById("scopeTitle").textContent="Eroare la încărcarea manifest.json";
 });
