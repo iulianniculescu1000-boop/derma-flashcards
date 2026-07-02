@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Flashcards Dermatologie</title>
+<style>
+  :root{
+    --bg:#f5f5f7;
+    --card:#ffffff;
+    --ink:#1d1d1f;
+    --muted:#6e6e73;
+    --line:rgba(0,0,0,.08);
+    --blue:#0071e3;
+    --green:#34c759;
+    --green-tint:#e6f7ec;
+    --red:#ff3b30;
+    --red-tint:#fdeceb;
+    --shadow:0 12px 40px rgba(0,0,0,.10), 0 2px 8px rgba(0,0,0,.04);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;}
+  body{
+    font-family:-apple-system,"SF Pro Display","SF Pro Text",BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:linear-gradient(180deg,#fbfbfd 0%,#f0f0f3 100%);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;
+    padding:28px 16px 60px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{width:100%;max-width:600px;}
+  header{text-align:center;margin-bottom:22px;position:relative;}
+  h1{font-size:26px;font-weight:700;letter-spacing:-.02em;margin:0 0 4px;}
+  .sub{color:var(--muted);font-size:15px;font-weight:400;}
+  #mistakesBtn{margin-top:12px;background:var(--card);border:1px solid var(--line);
+    color:var(--ink);font-size:13px;font-weight:600;padding:7px 14px;border-radius:980px;
+    cursor:pointer;font-family:inherit;box-shadow:0 1px 3px rgba(0,0,0,.05);transition:background .15s;}
+  #mistakesBtn:hover{background:#f0f0f3;}
+  #mCount{display:inline-flex;min-width:18px;height:18px;padding:0 5px;border-radius:980px;
+    background:var(--red);color:#fff;font-size:11px;align-items:center;justify-content:center;margin-left:2px;}
+
+  /* finish screen */
+  #finish{background:var(--card);border-radius:24px;box-shadow:var(--shadow);padding:36px 24px 26px;
+    text-align:center;animation:pop .4s cubic-bezier(.2,.8,.2,1);}
+  .ring{position:relative;width:140px;height:140px;margin:0 auto 18px;}
+  .ring svg{width:140px;height:140px;transform:rotate(-90deg);}
+  .ring circle{fill:none;stroke-width:10;stroke-linecap:round;}
+  .ring .bg{stroke:rgba(0,0,0,.07);}
+  .ring .fg{stroke:var(--blue);stroke-dasharray:327;stroke-dashoffset:327;
+    transition:stroke-dashoffset 1s cubic-bezier(.3,.9,.3,1),stroke .4s;}
+  .ringTxt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-size:32px;font-weight:700;letter-spacing:-.02em;}
+  .finTitle{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:6px;}
+  .finSub{color:var(--muted);font-size:15px;margin-bottom:22px;line-height:1.5;}
+  .bigBtn{width:100%;padding:15px;border-radius:16px;border:none;font-size:17px;font-weight:600;
+    cursor:pointer;font-family:inherit;margin-bottom:10px;transition:filter .15s,transform .06s,background .15s;}
+  .bigBtn:active{transform:scale(.99);}
+  .bigBtn.primary{background:var(--blue);color:#fff;}
+  .bigBtn.primary:hover{filter:brightness(1.06);}
+  .bigBtn.ghost{background:#f0f0f3;color:var(--ink);}
+  .bigBtn.ghost:hover{background:#e7e7ea;}
+  .bigBtn.danger{background:var(--red-tint);color:#c11a10;}
+  .bigBtn.ghost:disabled{opacity:.45;cursor:default;}
+
+  /* mistakes list */
+  #mistakes{background:var(--card);border-radius:24px;box-shadow:var(--shadow);padding:18px;
+    animation:pop .35s cubic-bezier(.2,.8,.2,1);}
+  .mHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+  .mTitle{font-size:20px;font-weight:700;letter-spacing:-.02em;}
+  .xBtn{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:var(--card);
+    font-size:15px;cursor:pointer;color:var(--muted);}
+  .xBtn:hover{background:#f0f0f3;}
+  #mBody{max-height:60vh;overflow-y:auto;margin-bottom:14px;}
+  .mItem{display:flex;gap:12px;align-items:center;padding:10px;border-radius:14px;
+    border:1px solid var(--line);margin-bottom:8px;}
+  .mItem img{width:58px;height:58px;object-fit:cover;border-radius:10px;flex:0 0 auto;background:#f2f2f4;}
+  .mInfo{min-width:0;}
+  .mDx{font-size:15px;font-weight:600;}
+  .mMeta{font-size:12px;color:var(--muted);margin-top:2px;}
+  .mEmpty{text-align:center;color:var(--muted);padding:30px 10px;font-size:15px;}
+  .mActions{display:flex;gap:10px;}
+  .mActions .bigBtn{margin-bottom:0;}
+
+  /* course pills */
+  .courseRow{display:flex;align-items:center;gap:6px;}
+  .scrollBtn{
+    flex:0 0 auto;width:32px;height:32px;border-radius:50%;border:1px solid var(--line);
+    background:var(--card);color:var(--ink);font-size:20px;line-height:1;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;padding:0 0 3px;
+    box-shadow:0 1px 3px rgba(0,0,0,.06);transition:background .15s ease;
+  }
+  .scrollBtn:hover{background:#f0f0f3;}
+  .scrollBtn:active{transform:scale(.94);}
+  #courseBar{
+    flex:1 1 auto;display:flex;gap:8px;overflow-x:auto;padding:4px 2px;
+    scrollbar-width:none;-ms-overflow-style:none;scroll-behavior:smooth;
+  }
+  #courseBar::-webkit-scrollbar{display:none;}
+  .hint{color:var(--muted);font-size:12px;text-align:center;margin:8px 4px 14px;}
+  .pill{
+    flex:0 0 auto;background:var(--card);color:var(--ink);border:1px solid var(--line);
+    padding:8px 14px;border-radius:980px;font-size:13px;font-weight:500;cursor:pointer;
+    white-space:nowrap;transition:all .18s ease;
+  }
+  .pill:hover{background:#f0f0f3;}
+  .pill.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+
+  /* score / progress */
+  #scoreRow{display:flex;align-items:center;justify-content:space-between;margin:0 4px 12px;
+    font-size:13px;color:var(--muted);font-weight:500;}
+  #progWrap{height:6px;background:rgba(0,0,0,.06);border-radius:980px;overflow:hidden;margin:0 4px 18px;}
+  #progBar{height:100%;width:0;background:var(--blue);border-radius:980px;transition:width .4s ease;}
+
+  /* card */
+  #card{background:var(--card);border-radius:24px;box-shadow:var(--shadow);padding:18px;
+    animation:pop .35s cubic-bezier(.2,.8,.2,1);}
+  @keyframes pop{from{opacity:0;transform:translateY(8px) scale(.99);}to{opacity:1;transform:none;}}
+  #imgWrap{width:100%;aspect-ratio:4/3;background:#f2f2f4;border-radius:16px;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;border:1px solid var(--line);}
+  #imgWrap img{width:100%;height:100%;object-fit:contain;}
+  .qlabel{font-size:13px;color:var(--muted);font-weight:600;text-transform:uppercase;
+    letter-spacing:.04em;margin:16px 2px 10px;}
+
+  .opt{
+    display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+    background:#fafafa;color:var(--ink);border:1px solid var(--line);
+    padding:14px 16px;border-radius:16px;margin-bottom:9px;font-size:16px;font-weight:500;
+    cursor:pointer;transition:transform .06s ease;
+  }
+  .opt:hover:not(:disabled){background:#f0f0f3;}
+  .opt:active:not(:disabled){transform:scale(.99);}
+  .opt .ltr{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
+    width:26px;height:26px;border-radius:50%;background:#e8e8ed;color:var(--muted);
+    font-size:13px;font-weight:600;}
+  .opt.correct{background-color:var(--green-tint);border-color:var(--green);color:#0f7a33;}
+  .opt.correct .ltr{background-color:var(--green);color:#fff;}
+  .opt.wrong{background-color:var(--red-tint);border-color:var(--red);color:#c11a10;}
+  .opt.wrong .ltr{background-color:var(--red);color:#fff;}
+  .opt:disabled{cursor:default;}
+
+  /* feedback + description */
+  #panel{margin-top:6px;display:none;animation:slide .3s ease;}
+  @keyframes slide{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+  .verdict{display:flex;align-items:center;gap:9px;font-size:16px;font-weight:600;margin:8px 2px 12px;}
+  .verdict .dot{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;
+    justify-content:center;color:#fff;font-size:15px;flex:0 0 auto;}
+  .verdict.ok{color:#0f7a33;} .verdict.ok .dot{background:var(--green);}
+  .verdict.no{color:#c11a10;} .verdict.no .dot{background:var(--red);}
+  .descCard{background:#f5f5f7;border-radius:16px;padding:14px 16px;border:1px solid var(--line);}
+  .descCard .h{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--muted);margin-bottom:6px;}
+  .descCard .t{font-size:15px;line-height:1.5;color:var(--ink);}
+
+  #nextBtn{margin-top:16px;width:100%;padding:15px;border-radius:16px;border:none;
+    background:var(--blue);color:#fff;font-size:17px;font-weight:600;cursor:pointer;
+    display:none;transition:filter .15s ease,transform .06s ease;font-family:inherit;}
+  #nextBtn:hover{filter:brightness(1.06);}
+  #nextBtn:active{transform:scale(.99);}
+  #srcInfo{color:var(--muted);font-size:12px;margin-top:14px;text-align:center;}
+  #empty{color:var(--muted);text-align:center;margin-top:50px;font-size:16px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Flashcards Dermatologie</h1>
+    <div class="sub">Recunoaște diagnosticul din imaginea clinică</div>
+    <button id="mistakesBtn" onclick="openMistakes()">⚑ Greșeli <span id="mCount">0</span></button>
+  </header>
+
+  <div class="courseRow">
+    <button id="scrollL" class="scrollBtn" aria-label="stânga">‹</button>
+    <div id="courseBar"></div>
+    <button id="scrollR" class="scrollBtn" aria-label="dreapta">›</button>
+  </div>
+  <div class="hint">Atinge mai multe cursuri ca să le combini · „Toate" le include pe toate</div>
+  <div id="scoreRow"><span id="scoreTxt">Scor 0 / 0</span><span id="remainTxt"></span></div>
+  <div id="progWrap"><div id="progBar"></div></div>
+
+  <div id="card" style="display:none">
+    <div id="imgWrap"><img id="cardImg" src="" alt="imagine clinică"></div>
+    <div class="qlabel">Ce diagnostic este?</div>
+    <div id="options"></div>
+    <div id="panel">
+      <div id="verdict" class="verdict"></div>
+      <div class="descCard">
+        <div class="h">Descrierea leziunii</div>
+        <div class="t" id="descText"></div>
+      </div>
+    </div>
+    <button id="nextBtn">Următoarea</button>
+    <div id="srcInfo"></div>
+  </div>
+  <div id="empty" style="display:none">Nicio imagine pentru filtrul ales.</div>
+
+  <div id="finish" style="display:none">
+    <div class="ring"><svg viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="52"/><circle id="ringFg" class="fg" cx="60" cy="60" r="52"/></svg><div class="ringTxt"><span id="finPct">0%</span></div></div>
+    <div class="finTitle" id="finTitle">Ai terminat! 🎉</div>
+    <div class="finSub" id="finSub"></div>
+    <button class="bigBtn primary" onclick="restart()">Reia setul</button>
+    <button class="bigBtn ghost" id="finReviewBtn" onclick="startReview()">Exersează greșelile</button>
+  </div>
+
+  <div id="mistakes" style="display:none">
+    <div class="mHead">
+      <span class="mTitle">Greșelile mele</span>
+      <button class="xBtn" onclick="closeMistakes()">✕</button>
+    </div>
+    <div id="mBody"></div>
+    <div class="mActions" id="mActions">
+      <button class="bigBtn primary" onclick="startReview()">Exersează toate (<span id="mCount2">0</span>)</button>
+      <button class="bigBtn danger" onclick="clearMistakes()">Șterge lista</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let manifest=[], pool=[], current=null;
+let selected=new Set(), allMode=true;
+let score={correct:0,total:0};
+let mode="normal";              // "normal" or "review" (practicing mistakes)
+let mistakes={};                // keyed by file -> {file,disease,course,page,chosen}
+
+const MKEY="derm_mistakes_v1";
+function loadMistakes(){try{mistakes=JSON.parse(localStorage.getItem(MKEY))||{};}catch(e){mistakes={};}}
+function saveMistakes(){try{localStorage.setItem(MKEY,JSON.stringify(mistakes));}catch(e){}}
+function mCount(){return Object.keys(mistakes).length;}
+function updateMistakeBtn(){
+  const n=mCount();
+  document.getElementById("mCount").textContent=n;
+  document.getElementById("mCount").style.display=n?"inline-flex":"none";
+  const c2=document.getElementById("mCount2");if(c2)c2.textContent=n;
+}
+
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function shortCourse(n){return n.replace(/^Cursul\s*/i,"");}
+
+function buildCourseBar(){
+  const courses=[...new Set(manifest.map(m=>m.course))];
+  const bar=document.getElementById("courseBar");bar.innerHTML="";
+  const all=document.createElement("button");
+  all.className="pill active";all.dataset.role="all";
+  all.textContent="Toate ("+manifest.length+")";
+  all.onclick=()=>{allMode=true;selected.clear();refreshPills();resetAndStart();};
+  bar.appendChild(all);
+  courses.forEach(c=>{
+    const n=manifest.filter(m=>m.course===c).length;
+    const b=document.createElement("button");b.className="pill";b.dataset.course=c;
+    b.textContent=shortCourse(c)+" ("+n+")";
+    b.onclick=()=>toggleCourse(c);bar.appendChild(b);
+  });
+}
+function toggleCourse(c){
+  if(selected.has(c))selected.delete(c);else selected.add(c);
+  allMode=selected.size===0;
+  refreshPills();resetAndStart();
+}
+function resolveMistakeCards(){
+  return Object.keys(mistakes).map(f=>manifest.find(m=>m.file===f)).filter(Boolean);
+}
+function refreshPills(){
+  document.querySelectorAll("#courseBar .pill").forEach(b=>{
+    if(b.dataset.role==="all")b.classList.toggle("active",allMode);
+    else b.classList.toggle("active",!allMode&&selected.has(b.dataset.course));
+  });
+}
+function resetAndStart(){mode="normal";score={correct:0,total:0};rebuildPool();sessionTotal=pool.length;nextCard();}
+function currentSet(){
+  return allMode?manifest.slice():manifest.filter(m=>selected.has(m.course));
+}
+function rebuildPool(){pool=shuffle(mode==="review"?resolveMistakeCards():currentSet());}
+let sessionTotal=0;   // cards in the set at the start of this run (for progress)
+function updateScore(){
+  document.getElementById("scoreTxt").textContent=`Scor ${score.correct} / ${score.total}`;
+  document.getElementById("remainTxt").textContent=`${pool.length} rămase`;
+  const done=sessionTotal-pool.length;
+  document.getElementById("progBar").style.width=sessionTotal?(done/sessionTotal*100)+"%":"0%";
+}
+
+function hideScreens(){
+  ["card","empty","finish","mistakes"].forEach(id=>document.getElementById(id).style.display="none");
+}
+
+function nextCard(){
+  if(pool.length===0){
+    if(score.total===0){hideScreens();document.getElementById("empty").style.display="block";return;}
+    showFinish();return;
+  }
+  hideScreens();
+  document.getElementById("card").style.display="block";
+  // restart entry animation
+  const card=document.getElementById("card");card.style.animation="none";void card.offsetWidth;card.style.animation="";
+
+  current=pool.pop();
+  document.getElementById("cardImg").src=current.file;
+  document.getElementById("srcInfo").textContent=`${current.course} · pagina ${current.page}`;
+
+  const correct=current.disease;
+  const others=manifest.filter(m=>m.disease!==correct);
+  const sameCourse=others.filter(m=>m.course===current.course);
+  const sameUnique=[...new Set(sameCourse.map(m=>m.disease))];
+  const src=sameUnique.length>=4?sameCourse:others;
+  const uniq=[...new Set(src.map(m=>m.disease))].filter(d=>d!==correct);
+  const distract=shuffle(uniq).slice(0,4);
+  const opts=shuffle([correct,...distract]);
+
+  const optsDiv=document.getElementById("options");optsDiv.innerHTML="";
+  document.getElementById("panel").style.display="none";
+  document.getElementById("nextBtn").style.display="none";
+  const letters=["a","b","c","d","e"];
+  opts.forEach((d,i)=>{
+    const b=document.createElement("button");b.className="opt";b.dataset.value=d;
+    b.innerHTML=`<span class="ltr">${letters[i]}</span><span>${d}</span>`;
+    b.onclick=()=>answer(b,d);optsDiv.appendChild(b);
+  });
+  updateScore();
+}
+
+function answer(btn,chosen){
+  document.querySelectorAll(".opt").forEach(b=>b.disabled=true);
+  const correct=current.disease;
+  score.total++;
+  const verdict=document.getElementById("verdict");
+  if(chosen===correct){
+    score.correct++;btn.classList.add("correct");
+    verdict.className="verdict ok";
+    verdict.innerHTML=`<span class="dot">✓</span><span>Corect — ${correct}</span>`;
+    if(mistakes[current.file]){delete mistakes[current.file];saveMistakes();updateMistakeBtn();}
+  }else{
+    btn.classList.add("wrong");
+    document.querySelectorAll(".opt").forEach(b=>{if(b.dataset.value===correct)b.classList.add("correct");});
+    verdict.className="verdict no";
+    verdict.innerHTML=`<span class="dot">✕</span><span>Greșit — corect: ${correct}</span>`;
+    mistakes[current.file]={file:current.file,disease:correct,course:current.course,page:current.page,chosen:chosen};
+    saveMistakes();updateMistakeBtn();
+  }
+  document.getElementById("descText").textContent=current.description||"—";
+  document.getElementById("panel").style.display="block";
+  document.getElementById("nextBtn").style.display="block";
+  updateScore();
+}
+
+function showFinish(){
+  hideScreens();
+  const pct=score.total?Math.round(score.correct/score.total*100):0;
+  const wrong=score.total-score.correct;
+  document.getElementById("finPct").textContent=pct+"%";
+  const fg=document.getElementById("ringFg");
+  fg.style.strokeDashoffset=327;
+  fg.style.stroke = pct>=80?"var(--green)":pct>=50?"var(--blue)":"var(--red)";
+  const msg = pct===100?"Perfect! Ai nimerit tot. 🏆" : pct>=80?"Excelent! 👏" : pct>=50?"Bine, mai exersează. 💪" : "Mai ai de lucru — reia! 📚";
+  document.getElementById("finTitle").textContent = pct===100?"Impecabil! 🎉":"Ai terminat! 🎉";
+  document.getElementById("finSub").innerHTML=`${msg}<br>Corecte <b>${score.correct}</b> · Greșite <b>${wrong}</b> din <b>${score.total}</b>`;
+  const rb=document.getElementById("finReviewBtn");
+  rb.textContent=`Exersează greșelile (${mCount()})`;
+  rb.disabled=mCount()===0;
+  document.getElementById("finish").style.display="block";
+  // animate ring after paint
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{fg.style.strokeDashoffset=327-327*pct/100;}));
+}
+
+function restart(){resetAndStart();}
+function startReview(){
+  if(mCount()===0)return;
+  mode="review";score={correct:0,total:0};
+  rebuildPool();sessionTotal=pool.length;
+  document.getElementById("mistakes").style.display="none";
+  nextCard();
+}
+
+function renderMistakes(){
+  const body=document.getElementById("mBody");
+  const items=Object.values(mistakes);
+  document.getElementById("mActions").style.display=items.length?"flex":"none";
+  if(!items.length){body.innerHTML='<div class="mEmpty">Nicio greșeală salvată încă.<br>Greșelile apar aici automat ca să le poți repeta.</div>';return;}
+  body.innerHTML="";
+  items.forEach(mk=>{
+    const row=document.createElement("div");row.className="mItem";
+    row.innerHTML=`<img src="${mk.file}" alt=""><div class="mInfo">
+      <div class="mDx">${mk.disease}</div>
+      <div class="mMeta">Ai ales: ${mk.chosen} · ${shortCourse(mk.course)} p.${mk.page}</div></div>`;
+    body.appendChild(row);
+  });
+}
+let lastScreen="card";
+function openMistakes(){
+  ["card","finish","empty"].forEach(id=>{if(document.getElementById(id).style.display==="block")lastScreen=id;});
+  hideScreens();renderMistakes();updateMistakeBtn();
+  document.getElementById("mistakes").style.display="block";
+}
+function closeMistakes(){
+  hideScreens();
+  const target=(lastScreen==="finish"||lastScreen==="empty")?lastScreen:(current?"card":null);
+  if(target)document.getElementById(target).style.display="block";
+  else resetAndStart();
+}
+function clearMistakes(){
+  if(!confirm("Ștergi toate greșelile salvate?"))return;
+  mistakes={};saveMistakes();updateMistakeBtn();renderMistakes();
+}
+document.getElementById("nextBtn").onclick=nextCard;
+document.getElementById("scrollL").onclick=()=>document.getElementById("courseBar").scrollBy({left:-220,behavior:"smooth"});
+document.getElementById("scrollR").onclick=()=>document.getElementById("courseBar").scrollBy({left:220,behavior:"smooth"});
+
+loadMistakes();updateMistakeBtn();
+fetch("manifest.json").then(r=>r.json()).then(data=>{
+  manifest=data;buildCourseBar();resetAndStart();
+}).catch(err=>{
+  document.querySelector(".sub").textContent="Eroare la încărcarea manifest.json: "+err;
+});
+</script>
+</body>
+</html>
