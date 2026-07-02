@@ -57,7 +57,9 @@
   .navHead.open{background:color-mix(in srgb,var(--cdot,#bbb) 17%,transparent);}
   .navHead .navDot{width:9px;height:9px;border-radius:50%;background:var(--cdot,#bbb);flex:0 0 auto;
     box-shadow:0 0 0 3px color-mix(in srgb,var(--cdot,#bbb) 24%,transparent);}
-  .navHead .navName{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .navHeadText{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px;}
+  .navHead .navName{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.2;}
+  .navMeta{font-size:10.5px;font-weight:500;opacity:.62;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .navHead .cnt{color:currentColor;opacity:.6;}
   .chev{font-size:9px;color:currentColor;opacity:.5;transition:transform .2s ease;display:inline-block;width:9px;}
   .navHead.open .chev{transform:rotate(90deg);}
@@ -181,6 +183,17 @@
   .mEmpty{text-align:center;color:var(--muted);padding:30px 10px;font-size:15px;}
   .mActions{display:flex;gap:10px;}
   .mActions .bigBtn{margin-bottom:0;}
+  .mStats{margin-bottom:12px;}
+  .mChips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:9px;}
+  .mChip{background:#f2f2f4;border-radius:980px;padding:5px 11px;font-size:12px;font-weight:600;color:var(--muted);}
+  .mHardest{background:color-mix(in srgb,var(--red) 8%,transparent);
+    border:1px solid color-mix(in srgb,var(--red) 20%,transparent);color:#b5384b;
+    border-radius:12px;padding:9px 12px;font-size:13px;}
+  .mGroup{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--ink);margin:16px 2px 8px;}
+  .mGDot{width:9px;height:9px;border-radius:50%;flex:0 0 auto;box-shadow:0 0 0 3px rgba(0,0,0,.04);}
+  .mGCnt{color:var(--muted);font-weight:600;}
+  .mBadge{display:inline-block;margin-left:7px;background:var(--red);color:#fff;font-size:11px;font-weight:700;
+    padding:1px 7px;border-radius:980px;vertical-align:middle;}
 
   /* home screen */
   #home{text-align:center;padding:10px 0 20px;animation:pop .4s cubic-bezier(.2,.8,.2,1);}
@@ -198,6 +211,9 @@
   .stat{flex:1;max-width:120px;background:#f5f5f7;border-radius:16px;padding:14px 8px;}
   .statN{display:block;font-size:24px;font-weight:800;letter-spacing:-.02em;}
   .statL{font-size:12px;color:var(--muted);}
+  .homeStudy{display:inline-flex;align-items:center;gap:6px;margin:0 auto 20px;padding:8px 15px;
+    border-radius:980px;background:color-mix(in srgb,var(--blue) 9%,transparent);color:var(--blue);
+    font-size:13px;font-weight:600;position:relative;}
   .homeBtns{display:flex;flex-direction:column;gap:10px;max-width:360px;margin:0 auto;position:relative;}
   .homeBtns .bigBtn{margin-bottom:0;}
   .homeHint{margin-top:18px;color:var(--muted);font-size:13px;position:relative;}
@@ -281,6 +297,7 @@
             <div class="stat"><span class="statN" id="stCourses">0</span><span class="statL">cursuri</span></div>
             <div class="stat"><span class="statN" id="stDx">0</span><span class="statL">diagnostice</span></div>
           </div>
+          <div class="homeStudy" id="homeStudy"></div>
           <div class="homeBtns">
             <button class="bigBtn primary" onclick="selectFilter({type:'all'})">▶︎ Start rapid · toate cursurile</button>
             <button class="bigBtn ghost" onclick="openCombine()">🎚️ Combină cursuri</button>
@@ -345,6 +362,7 @@
           <span class="mTitle">Greșelile mele</span>
           <button class="xBtn" onclick="closeMistakes()">✕</button>
         </div>
+        <div id="mStats" class="mStats"></div>
         <div id="mBody"></div>
         <div class="mActions" id="mActions">
           <button class="bigBtn primary" onclick="startReview()">Exersează toate (<span id="mCount2">0</span>)</button>
@@ -378,6 +396,16 @@ function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor
 function shortCourse(n){return n.replace(/^Cursul\s*/i,"");}
 function courseNum(n){const m=n.match(/Cursul\s*(\d+)/i);return m?parseInt(m[1],10):999;}
 function sortedCourses(){return [...new Set(manifest.map(m=>m.course))].sort((a,b)=>courseNum(a)-courseNum(b));}
+// smart study-time estimate: ~0.8 min per image (privit + citit descrierea) + 1.2 min per diagnostic distinct
+function studyMinutes(course){
+  const imgs=manifest.filter(m=>m.course===course);
+  const dx=new Set(imgs.map(m=>m.disease)).size;
+  return Math.max(5,Math.round(imgs.length*0.8+dx*1.2));
+}
+function fmtTime(min){
+  if(min<60)return `~${min} min`;
+  const h=Math.floor(min/60),m=min%60;return m?`~${h}h ${m}m`:`~${h}h`;
+}
 
 /* ---------- sidebar ---------- */
 function filterKey(f){
@@ -418,7 +446,7 @@ function buildSidebar(){
     const accent=courseColor(c);
     const head=document.createElement('button');head.className='navHead';
     head.style.setProperty('--cdot',accent);
-    head.innerHTML=`<span class="chev">▶</span><span class="navDot"></span><span class="navName">${shortCourse(c)}</span><span class="cnt">${imgs.length}</span>`;
+    head.innerHTML=`<span class="chev">▶</span><span class="navDot"></span><span class="navHeadText"><span class="navName">${shortCourse(c)}</span><span class="navMeta">${imgs.length} poze · ⏱ ${fmtTime(studyMinutes(c))}</span></span>`;
     const children=document.createElement('div');children.className='navChildren';
     children.style.setProperty('--cdot',accent);
     head.onclick=()=>{const open=children.classList.toggle('open');head.classList.toggle('open',open);};
@@ -487,7 +515,14 @@ function currentSet(){
   return manifest.filter(m=>m.course===filter.course&&m.disease===filter.disease);
 }
 function resolveMistakeCards(){return Object.keys(mistakes).map(f=>manifest.find(m=>m.file===f)).filter(Boolean);}
-function rebuildPool(){pool=shuffle(mode==="review"?resolveMistakeCards():currentSet());}
+function rebuildPool(){
+  if(mode==="review"){
+    // prioritize most-missed first (pool.pop takes from the end)
+    pool=resolveMistakeCards().sort((a,b)=>(((mistakes[a.file]||{}).count)||1)-(((mistakes[b.file]||{}).count)||1));
+  }else{
+    pool=shuffle(currentSet());
+  }
+}
 function resetAndStart(){mode="normal";score={correct:0,total:0};rebuildPool();sessionTotal=pool.length;nextCard();}
 
 function updateScore(){
@@ -517,6 +552,8 @@ function showHome(){
   document.getElementById("stImgs").textContent=manifest.length;
   document.getElementById("stCourses").textContent=new Set(manifest.map(m=>m.course)).size;
   document.getElementById("stDx").textContent=new Set(manifest.map(m=>m.disease)).size;
+  const totalMin=sortedCourses().reduce((s,c)=>s+studyMinutes(c),0);
+  document.getElementById("homeStudy").innerHTML=`⏱ ${fmtTime(totalMin)} de studiu estimat`;
   const rb=document.getElementById("homeReviewBtn");
   rb.style.display=mCount()?"block":"none";
   document.getElementById("homeMCount").textContent=mCount();
@@ -618,7 +655,11 @@ function answer(btn,chosen){
     document.querySelectorAll(".opt").forEach(b=>{if(b.dataset.value===correct)b.classList.add("correct");});
     verdict.className="verdict no";
     verdict.innerHTML=`<span class="dot">✕</span><span>Greșit — corect: ${correct}</span>`;
-    mistakes[current.file]={file:current.file,disease:correct,course:current.course,page:current.page,chosen:chosen};
+    const ex=mistakes[current.file];
+    const confused=Object.assign({},ex&&ex.confused);
+    confused[chosen]=(confused[chosen]||0)+1;
+    mistakes[current.file]={file:current.file,disease:correct,course:current.course,page:current.page,
+      chosen:chosen,count:((ex&&ex.count)||0)+1,confused:confused,ts:Date.now()};
     saveMistakes();updateMistakeBtn();
   }
   document.getElementById("descText").textContent=current.description||"—";
@@ -655,16 +696,46 @@ function startReview(){
 
 function renderMistakes(){
   const body=document.getElementById("mBody");
+  const stats=document.getElementById("mStats");
   const items=Object.values(mistakes);
   document.getElementById("mActions").style.display=items.length?"flex":"none";
-  if(!items.length){body.innerHTML='<div class="mEmpty">Nicio greșeală salvată încă.<br>Greșelile apar aici automat ca să le poți repeta.</div>';return;}
+  if(!items.length){
+    stats.innerHTML="";
+    body.innerHTML='<div class="mEmpty">Nicio greșeală salvată încă.<br>Greșelile apar aici automat ca să le poți repeta.</div>';
+    return;
+  }
+  const totalWrong=items.reduce((s,m)=>s+(m.count||1),0);
+  const nDx=new Set(items.map(m=>m.disease)).size;
+  const nCourses=new Set(items.map(m=>m.course)).size;
+  // hardest diagnosis (by total misses across its cards)
+  const perDx={};items.forEach(m=>{perDx[m.disease]=(perDx[m.disease]||0)+(m.count||1);});
+  const hardest=Object.entries(perDx).sort((a,b)=>b[1]-a[1])[0];
+  stats.innerHTML=
+    `<div class="mChips"><span class="mChip">${items.length} imagini</span>`+
+    `<span class="mChip">${nDx} diagnostice</span>`+
+    `<span class="mChip">${nCourses} cursuri</span>`+
+    `<span class="mChip">${totalWrong} greșeli total</span></div>`+
+    (hardest&&hardest[1]>1?`<div class="mHardest">🎯 Cel mai greu: <b>${hardest[0]}</b> — greșit de ${hardest[1]}×</div>`:"");
+
+  // group by course (chronological), each group sorted by miss-count desc
   body.innerHTML="";
-  items.forEach(mk=>{
-    const row=document.createElement("div");row.className="mItem";
-    row.innerHTML=`<img src="${mk.file}" alt=""><div class="mInfo">
-      <div class="mDx">${mk.disease}</div>
-      <div class="mMeta">Ai ales: ${mk.chosen} · ${shortCourse(mk.course)} p.${mk.page}</div></div>`;
-    body.appendChild(row);
+  const byCourse={};items.forEach(m=>{(byCourse[m.course]=byCourse[m.course]||[]).push(m);});
+  sortedCourses().filter(c=>byCourse[c]).forEach(c=>{
+    const accent=courseColor(c);
+    const grp=byCourse[c].sort((a,b)=>(b.count||1)-(a.count||1));
+    const gh=document.createElement("div");gh.className="mGroup";
+    gh.innerHTML=`<span class="mGDot" style="background:${accent}"></span><span>${shortCourse(c)}</span><span class="mGCnt">${grp.length}</span>`;
+    body.appendChild(gh);
+    grp.forEach(mk=>{
+      const cnt=mk.count||1;
+      const conf=mk.confused?Object.entries(mk.confused).sort((a,b)=>b[1]-a[1]).slice(0,2)
+        .map(([a,n])=>n>1?`${a} (${n}×)`:a).join(", "):mk.chosen;
+      const row=document.createElement("div");row.className="mItem";
+      row.innerHTML=`<img src="${mk.file}" alt=""><div class="mInfo">
+        <div class="mDx">${mk.disease}${cnt>1?`<span class="mBadge">${cnt}×</span>`:""}</div>
+        <div class="mMeta">Confundat cu: ${conf||"—"} · p.${mk.page}</div></div>`;
+      body.appendChild(row);
+    });
   });
 }
 let lastScreen="card";
