@@ -42,15 +42,21 @@
   .navItem .navName{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .navItem.sub{padding-left:30px;font-weight:450;font-size:13.5px;}
   .cnt{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;flex:0 0 auto;}
-  .navHead{display:flex;align-items:center;gap:8px;width:100%;background:none;border:none;
-    text-align:left;padding:9px 10px;border-radius:10px;font-size:14px;font-weight:600;
-    color:var(--ink);cursor:pointer;font-family:inherit;margin-top:2px;}
-  .navHead:hover{background:#f0f0f3;}
+  .navHead{display:flex;align-items:center;gap:8px;width:100%;border:none;
+    text-align:left;padding:10px 12px;border-radius:12px;font-size:14px;font-weight:700;
+    background:var(--cbg,#f0f0f3);color:var(--cink,var(--ink));cursor:pointer;font-family:inherit;margin-top:6px;
+    transition:filter .15s ease;}
+  .navHead:hover{filter:brightness(.965);}
+  .navHead .navDot{width:9px;height:9px;border-radius:50%;background:var(--cdot,#bbb);flex:0 0 auto;
+    box-shadow:0 0 0 3px color-mix(in srgb,var(--cdot,#bbb) 22%, transparent);}
   .navHead .navName{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .chev{font-size:10px;color:var(--muted);transition:transform .2s ease;display:inline-block;width:10px;}
+  .navHead .cnt{color:var(--cink,var(--muted));opacity:.7;}
+  .chev{font-size:9px;color:var(--cink,var(--muted));opacity:.65;transition:transform .2s ease;display:inline-block;width:9px;}
   .navHead.open .chev{transform:rotate(90deg);}
-  .navChildren{display:none;padding-bottom:4px;}
+  .navChildren{display:none;margin:2px 0 4px 16px;padding-left:8px;border-left:2px solid var(--cdot,#e0e0e0);}
   .navChildren.open{display:block;animation:fade .2s ease;}
+  .navChildren .navItem.active{background:var(--cbg,var(--blue-tint));color:var(--cink,var(--blue));}
+  .navChildren .navItem.active .cnt{color:var(--cink,var(--blue));}
   @keyframes fade{from{opacity:0;}to{opacity:1;}}
 
   /* top bar (main) */
@@ -200,6 +206,20 @@
   .linkBtn{background:none;border:none;color:var(--blue);font-size:13px;font-weight:600;
     cursor:pointer;font-family:inherit;margin-top:12px;padding:4px;}
 
+  /* gallery (browse a single disease) */
+  #gallery{animation:pop .35s cubic-bezier(.2,.8,.2,1);}
+  .galHead{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .galTitle{font-size:22px;font-weight:800;letter-spacing:-.02em;}
+  .galSub{font-size:13px;color:var(--muted);margin-top:2px;}
+  .galHead .spacer{flex:1;}
+  .galTest{background:var(--blue);color:#fff;border:none;border-radius:980px;padding:10px 18px;
+    font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;flex:0 0 auto;transition:filter .15s;}
+  .galTest:hover{filter:brightness(1.06);}
+  .galItem{background:var(--card);border-radius:20px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:16px;}
+  .galImg{width:100%;aspect-ratio:4/3;background:#f2f2f4;display:flex;align-items:center;justify-content:center;}
+  .galImg img{width:100%;height:100%;object-fit:contain;}
+  .galDesc{padding:14px 16px 16px;font-size:15px;line-height:1.5;color:var(--ink);}
+
   /* mobile: sidebar becomes a slide-in drawer */
   @media(max-width:900px){
     .sidebar{position:fixed;top:0;left:0;height:100%;transform:translateX(-100%);
@@ -259,6 +279,15 @@
           <button class="bigBtn primary" id="cmbStart" onclick="startCombine()" disabled>Începe</button>
         </div>
         <button class="linkBtn" id="cmbAll" onclick="toggleAllCombine()">Selectează tot</button>
+      </div>
+
+      <div id="gallery" style="display:none">
+        <div class="galHead">
+          <div><div class="galTitle" id="galTitle"></div><div class="galSub" id="galCount"></div></div>
+          <div class="spacer"></div>
+          <button class="galTest" id="galTestBtn" onclick="quizCourseOfGallery()">Testează cursul ▶︎</button>
+        </div>
+        <div id="galBody"></div>
       </div>
 
       <div id="scoreRow"><span id="scoreTxt">Scor 0 / 0</span><span id="remainTxt"></span></div>
@@ -355,11 +384,15 @@ function buildSidebar(){
   nav.appendChild(makeLeaf('🗂️ Toate cursurile',manifest.length,{type:'all'},false));
 
   const courses=[...new Set(manifest.map(m=>m.course))];
+  COURSE_ORDER=courses.slice();
   courses.forEach(c=>{
     const imgs=manifest.filter(m=>m.course===c);
+    const col=courseColor(c);
     const head=document.createElement('button');head.className='navHead';
-    head.innerHTML=`<span class="chev">▶</span><span class="navName">${shortCourse(c)}</span><span class="cnt">${imgs.length}</span>`;
+    head.style.cssText=`--cbg:${col.bg};--cdot:${col.dot};--cink:${col.ink};`;
+    head.innerHTML=`<span class="chev">▶</span><span class="navDot"></span><span class="navName">${shortCourse(c)}</span><span class="cnt">${imgs.length}</span>`;
     const children=document.createElement('div');children.className='navChildren';
+    children.style.cssText=`--cbg:${col.bg};--cdot:${col.dot};--cink:${col.ink};`;
     head.onclick=()=>{const open=children.classList.toggle('open');head.classList.toggle('open',open);};
 
     children.appendChild(makeLeaf('Tot cursul',imgs.length,{type:'course',course:c},true));
@@ -390,7 +423,27 @@ function selectFilter(f){
     });
   }
   document.getElementById('scopeTitle').textContent=scopeLabel();
-  resetAndStart();
+  if(f.type==='disease')showGallery();
+  else resetAndStart();
+}
+
+/* ---------- gallery (browse one disease) ---------- */
+function showGallery(){
+  hideScreens();setChrome(false);
+  const items=currentSet();
+  document.getElementById('galTitle').textContent=filter.disease;
+  document.getElementById('galCount').textContent=`${items.length} ${items.length===1?'imagine':'imagini'} · ${shortCourse(filter.course)}`;
+  const g=document.getElementById('galBody');g.innerHTML='';
+  items.forEach(m=>{
+    const c=document.createElement('div');c.className='galItem';
+    c.innerHTML=`<div class="galImg"><img src="${m.file}" loading="lazy" alt=""></div><div class="galDesc">${m.description||''}</div>`;
+    g.appendChild(c);
+  });
+  document.getElementById('gallery').style.display='block';
+  document.querySelector('.main').scrollTop=0;window.scrollTo(0,0);
+}
+function quizCourseOfGallery(){
+  selectFilter({type:'course',course:filter.course});
 }
 
 function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('backdrop').classList.add('show');}
@@ -413,7 +466,26 @@ function updateScore(){
   const done=sessionTotal-pool.length;
   document.getElementById("progBar").style.width=sessionTotal?(done/sessionTotal*100)+"%":"0%";
 }
-function hideScreens(){["home","combine","card","empty","finish","mistakes"].forEach(id=>document.getElementById(id).style.display="none");}
+function hideScreens(){["home","combine","gallery","card","empty","finish","mistakes"].forEach(id=>document.getElementById(id).style.display="none");}
+
+const PALETTE=[
+  {bg:'#ffeef0',dot:'#ff6b81',ink:'#b5384b'},
+  {bg:'#fff2e6',dot:'#ff9f43',ink:'#a85e18'},
+  {bg:'#fff8de',dot:'#e6b800',ink:'#8a6d00'},
+  {bg:'#e9f9ef',dot:'#26de81',ink:'#1a7a48'},
+  {bg:'#e3f9f5',dot:'#20bdaa',ink:'#0f766b'},
+  {bg:'#e8f4fd',dot:'#45aaf2',ink:'#1b6ca8'},
+  {bg:'#eef1fe',dot:'#5b7cf0',ink:'#2b47a8'},
+  {bg:'#f0ecff',dot:'#7d5fff',ink:'#4b34c9'},
+  {bg:'#f7ecfd',dot:'#a55eea',ink:'#7231b0'},
+  {bg:'#ffeef7',dot:'#fd79a8',ink:'#bd3f72'},
+  {bg:'#f2eeea',dot:'#b08968',ink:'#75543a'},
+];
+let COURSE_ORDER=[];
+function courseColor(course){
+  const i=COURSE_ORDER.indexOf(course);
+  return PALETTE[(i<0?0:i)%PALETTE.length];
+}
 function setChrome(on){
   document.getElementById("scoreRow").style.display=on?"flex":"none";
   document.getElementById("progWrap").style.display=on?"block":"none";
