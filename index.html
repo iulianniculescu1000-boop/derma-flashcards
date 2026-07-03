@@ -760,7 +760,7 @@ document.getElementById("nextBtn").onclick=nextCard;
 document.getElementById("cardImg").addEventListener("load",function(){this.classList.add("loaded");});
 
 loadMistakes();updateMistakeBtn();
-fetch("manifest.json").then(r=>r.json()).then(data=>{
+fetch("manifest.json?v="+Date.now()).then(r=>r.json()).then(data=>{
   manifest=data;buildSidebar();showHome();
 }).catch(err=>{
   document.getElementById("scopeTitle").textContent="Eroare la încărcarea manifest.json";
