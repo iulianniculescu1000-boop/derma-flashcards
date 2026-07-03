@@ -7,7 +7,7 @@
     "caption": "Leziuni elementare: • Comedoane — dopuri de cheratină în ostiumul folicular; deschise (puncte negre, ostium larg) sau închise (puncte albe, ostium îngust); frecvent asociate cu eritem perilezional și pustule • Papule și papulo-pustule — papulă acoperită de pustulă (acnee papulo-pustuloasă) • Noduli sau chisturi — diametru 1-4 cm (acnee nodulo-chistică); nodulii noi apar prin ruperi foliculare repetate urmate de reîncapsulare; se pot uni în supradenivelări liniare și tracturi sinuoase • Sinusuri: tracturi de drenaj tapetate cu epiteliu, asociate acneei nodulare • Cicatrice: atrofice (subdenivelate) sau hipertrofice (uneori cheloide) • Seboreea: frecvent prezentă pe față și scalp Regiuni afectate: față, gât, trunchi, brațe, regiunea gluteală.",
     "needs_label": true,
     "disease": "Acnee comedoniană",
-    "description": "Se observă comedoane deschise și închise de dimensiuni mici pe față — acnee ușoară comedoniană."
+    "description": "Se observă comedoane deschise (brun-negricioase) și închise (albicioase) de dimensiuni mici (sub 1–2 mm), cu margini bine delimitate, fără inflamație semnificativă — acnee comedoniană."
   },
   {
     "course": "Cursul 13-Acnee si Rozacee",
@@ -17,7 +17,7 @@
     "caption": "Comedoane — dopuri de cheratină în ostiumul folicular; deschise (puncte negre, ostium larg) sau închise (puncte albe, ostium îngust); frecvent asociate cu eritem Papule și papulo-pustule — papulă acoperită de pustulă (acnee papulo-pustuloasă) Noduli sau chisturi — diametru 1-4 cm (acnee nodulo-chistică); nodulii noi apar prin ruperi foliculare repetate urmate de reîncapsulare; se pot uni în supradenivelări liniare Sinusuri: tracturi de drenaj tapetate cu epiteliu, asociate acneei nodulare Cicatrice: atrofice (subdenivelate) sau hipertrofice (uneori cheloide) Seboreea: frecvent prezentă pe față și scalp Regiuni afectate: față, gât, trunchi, brațe, regiunea gluteală.",
     "needs_label": true,
     "disease": "Acnee papulo-pustuloasă",
-    "description": "Se observă papule eritematoase și pustule multiple de dimensiuni variabile — acnee papulo-pustuloasă."
+    "description": "Se observă papule eritematoase și pustule multiple de dimensiuni variabile (1–5 mm) predominant pe obraji, bărbie și regiunea mandibulară, cu câteva cicatrici post-inflamatorii — acnee papulo-pustuloasă."
   },
   {
     "course": "Cursul 13-Acnee si Rozacee",
@@ -27,7 +27,7 @@
     "caption": "",
     "needs_label": true,
     "disease": "Acnee nodulo-chistică",
-    "description": "La nivelul feței se observă papule și pustule inflamatorii multiple, unele confluente, asociate cu noduli și cicatrice — acnee nodulo-chistică."
+    "description": "Erupție nodulo-chistică severă cu multipli noduli inflamatori, chisturi și pustule (până la 2–3 cm) și edem inflamator marcat în regiunea malară dreaptă, distribuție facială confluentă — acnee nodulo-chistică."
   },
   {
     "course": "Cursul 13-Acnee si Rozacee",
@@ -36,8 +36,8 @@
     "label": "Acnee papulo- pustuloasă",
     "caption": "Se observă papule eritematoase și pustule multiple de dimensiuni variabile — acnee papulo- pustuloasă.",
     "needs_label": false,
-    "disease": "Acnee nodulo-chistică",
-    "description": "La nivelul obrazului se observă noduli și chisturi inflamatorii confluente, cu suprafață crustoasă și exsudativă — acnee nodulo-chistică severă."
+    "disease": "Acnee conglobată",
+    "description": "La nivelul hemifaciesului drept se observă multipli noduli și chisturi mari confluente (peste 1–2 cm), cu eritem intens punctat de cruste gălbui și zone de pustulație activă, suprafață neregulată difuză — acnee conglobată."
   },
   {
     "course": "Cursul 13-Acnee si Rozacee",
@@ -46,8 +46,8 @@
     "label": "Acnee nodulo-chistică",
     "caption": "Se observă o erupție nodulo-chistică severă cu multipli noduli inflamatori, chisturi și pustule confluente pe față — acnee nodulo-chistică.",
     "needs_label": false,
-    "disease": "Acnee nodulo-chistică",
-    "description": "Se observă multiple leziuni nodulare, chistice, confluante, intercalate cu pustule și abcese pe trunchi — acnee conglobată cu cicatrice recente."
+    "disease": "Acnee conglobată",
+    "description": "Pe spate, umeri și partea superioară a brațelor se observă multiple leziuni nodulare, chistice, confluente, intercalate cu pustule, abcese și numeroase cicatrici hiperpigmentate, culoare roșu-violacee — acnee conglobată."
   },
   {
     "course": "Cursul 13-Acnee si Rozacee",
@@ -56,8 +56,8 @@
     "label": "Rozacee stadiul I (eritem și telangiectazii, fără papule)",
     "caption": "TABLOU CLINIC Antecedente de înroșire periodică a feței la consumul de lichide fierbinți, alimente picante, alcool, expunere la soare sau căldură. Localizare simetrică pe față; rareori pe gât, piept, spate, scalp. Fără comedoane (element esențial de diferențiere față de acnee). • Precoce: congestie patognomonică — „față roșiatică\"; mici papule și papulo-pustule (2-3 mm), pustule mici (<1 mm) la apexul papulelor • Tardiv: facies roșiatic cu papule și noduli roșu aprins, bine delimitați; telangiectazii; în forma cronică — hiperplazie marcată a glandelor sebacee și limfedem, cu modificarea aspectului nasului (rinofimă), frunții (metofimă), pleoapelor (blefarofimă), urechilor (otofimă) și bărbiei (gnatofimă); consistență elastică la palpare • Afectare oculară: înroșire a ochilor prin blefarită cronică, conjunctivită sau episclerită; cheratită rozaceică (rară dar severă — ulcerații corneene)",
     "needs_label": false,
-    "disease": "Rozacee",
-    "description": "Se observă eritem persistent și telangiectazii fine pe față, cu înroșire facială caracteristică — rozacee stadiul I."
+    "disease": "Rozacee stadiul I",
+    "description": "Se observă eritem difuz persistent asociat cu telangiectazii fine, distribuit simetric centro-facial (obraji, nas, frunte), fără leziuni papulo-pustuloase — rozacee stadiul I (eritemato-telangiectatic)."
   },
   {
     "course": "Cursul 13-Acnee si Rozacee",
@@ -66,8 +66,8 @@
     "label": "Rozacee stadiul II incipient (papule pe fond eritematos)",
     "caption": "Antecedente de înroșire periodică a feței la consumul de lichide fierbinți, alimente picante, alcool, expunere la soare sau căldură. Localizare simetrică pe față; rareori pe gât, piept, spate, scalp. Fără comedoane (element esențial de diferențiere față de acnee). Precoce: congestie patognomonică — „față roșiatică\"; mici papule și papulo-pustule (2-3 mm), pustule mici (<1 mm) la apexul papulelor Tardiv: facies roșiatic cu papule și noduli roșu aprins, bine delimitați; telangiectazii; în forma cronică — hiperplazie marcată a glandelor sebacee și limfedem, cu modificarea aspectului nasului (rinofimă), frunții (metofimă), pleoapelor (blefarofimă), urechilor (otofimă) și bărbiei (gnatofimă); consistență elastică la palpare Afectare oculară: înroșire a ochilor prin blefarită cronică, conjunctivită sau episclerită; cheratită rozaceică (rară dar severă — ulcerații corneene)",
     "needs_label": false,
-    "disease": "Rozacee",
-    "description": "La nivelul obrajilor se observă două placarde eritematoase simetrice, bine delimitate, cu papule inflamatorii diseminate — rozacee papulo-pustuloasă."
+    "disease": "Rozacee stadiul II",
+    "description": "La nivelul obrajilor se observă eritem persistent cu papule inflamatorii și pustule mici (1–3 mm) distribuite simetric, alături de telangiectazii fine — rozacee stadiul II (papulo-pustuloasă)."
   },
   {
     "course": "Cursul 13-Acnee si Rozacee",
@@ -76,8 +76,8 @@
     "label": "Rozacee stadiul I",
     "caption": "Se observă eritem persistent și telangiectazii fine pe față, cu înroșire facială caracteristică — rozacee stadiul I.",
     "needs_label": false,
-    "disease": "Rozacee",
-    "description": "Se observă eritem difuz persistent asociat cu papule inflamatorii și pustule mici — rozacee stadiul II, fără comedoane."
+    "disease": "Rozacee stadiul II-III",
+    "description": "Se observă un placard eritematos difuz cu papule inflamatorii și pustule confluente și zone de edem discret la nivelul obrazului — rozacee stadiul II-III."
   },
   {
     "course": "Cursul 13-Acnee si Rozacee",
@@ -86,8 +86,8 @@
     "label": "Rozacee stadiul II, fără comedoane",
     "caption": "Se observă eritem difuz persistent asociat cu papule inflamatorii și pustule mici — rozacee stadiul II, fără comedoane.",
     "needs_label": false,
-    "disease": "Rozacee",
-    "description": "Se observă două placarde eritematoase confluente frontal și centro-facial cu papule și pustule — rozacee stadiul II."
+    "disease": "Rozacee stadiul III (papulo-pustuloasă)",
+    "description": "Se observă două placarde eritematoase confluente frontal și centro-facial cu numeroase papule și pustule active, telangiectazii și hipertrofie sebacee — rozacee stadiul III, formă papulo-pustuloasă."
   },
   {
     "course": "Cursul 13-Acnee si Rozacee",
@@ -96,8 +96,8 @@
     "label": "Rozacee stadiul II-III",
     "caption": "Se observă placard eritematos difuz cu papule inflamatorii și pustule, edem și telangiectazii — rozacee stadiul II-III.",
     "needs_label": false,
-    "disease": "Rozacee",
-    "description": "Se observă o localizare centro-facială și frontală cu placarde eritematoase confluente, hipertrofie a piramidei nazale (rinofimă) și edem solid persistat — rozacee stadiul III."
+    "disease": "Rozacee stadiul III (fimatoasă)",
+    "description": "Localizare centro-facială și frontală cu hipertrofie tisulară severă a nasului (rinofimă), orificii foliculare dilatate cu dopuri de keratină și edem palpebral (blefarofimă) — rozacee stadiul III, formă fimatoasă."
   },
   {
     "course": "Cursul 2-Infectii virale",
@@ -2428,36 +2428,6 @@
     "needs_label": false,
     "disease": "Sifilis terțiar (gomă)",
     "description": "Se observă o cicatrice atrofică hiperpigmentată de formă neregulată la nivelul comisurii bucale drepte — aspect după trei injecții IM de penicilină G pentru gomă sifilitică."
-  },
-  {
-    "course": "Cursul 12-BTS",
-    "page": 13,
-    "file": "images/cursul-12-bts/p13_x73.jpeg",
-    "label": "Limfogranulomatoza veneriană - semnul jgheabului",
-    "caption": "PATOGENEZĂ Limfangită și limfadenită în câmpul de drenaj al zonei de inoculare → perilimfangită și periadenită → necroză, abcese loculare, fistule și sinusuri → pe măsura remiterii infecției, fibroza înlocuiește inflamația acută → blocare drenaj limfatic, edem cronic, stricturi. TABLOU CLINIC • Leziune primară: veziculă mică și indoloră sau ulcerație/papulă fără indurație pe penis sau vulvă; se vindecă în câteva zile; uneori uretrită nespecifică sau eroziuni herpetiforme • Sindrom inghinal: limfadenopatii inghinale dureroase la 2-6 săptămâni după expunere; unilateral în 2/3 din cazuri; ganglioni inițial discreți → periadenită progresivă → formațiuni fluctuante cu fistule; semnul jgheabului — mărire extensivă a ganglionilor deasupra și dedesubtul ligamentului Poupart; bubon unilateral (prezentarea cea mai frecventă); în 75% din cazuri sunt afectați și ganglionii iliaci profunzi • Sindrom ano-genito-rectal (MSM/femei): proctocolită, hiperplazie a țesutului limfatic perirectal; limforoizi (aspect de hemoroizi) sau condiloame perianale • Estiomen: elefantiazis al organelor genitale (de obicei la femei), cu ulcerații, apare la 1-20 ani după infecție • Eritem nodos în 10% din cazuri",
-    "needs_label": false,
-    "disease": "Limfogranulomatoză veneriană (LGV)",
-    "description": "Se observă o leziune primară localizată (papulă/ulcerație mică) în regiunea inghino-genitală, fără indurație — leziune primară de limfogranulomatoză veneriană (LGV)."
-  },
-  {
-    "course": "Cursul 12-BTS",
-    "page": 15,
-    "file": "images/cursul-12-bts/p15_x74.jpeg",
-    "label": "Șancru moale",
-    "caption": "",
-    "needs_label": false,
-    "disease": "Șancru moale (șancroid)",
-    "description": "Se observă o ulcerație dureroasă cu dimensiuni extinse, margini nete și subdenivelate și eritem și edem marcat în jur la nivelul corpului penian — șancru moale."
-  },
-  {
-    "course": "Cursul 12-BTS",
-    "page": 15,
-    "file": "images/cursul-12-bts/p15_x75.jpeg",
-    "label": "Șancru moale prin autoinoculare",
-    "caption": "",
-    "needs_label": false,
-    "disease": "Șancru moale (șancroid)",
-    "description": "Se observă multiple ulcerații dureroase cu aspect perforat și margini subdenivelate la nivelul vulvei — șancru moale prin autoinoculare."
   },
   {
     "course": "Cursul 7-Psoriazis",
