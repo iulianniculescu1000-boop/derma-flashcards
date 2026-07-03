@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0071e3">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Derma">
 <title>Flashcards Dermatologie</title>
 <style>
   :root{
@@ -33,6 +38,9 @@
   .navBrandSub{font-size:12px;color:var(--muted);padding:0 10px 16px;font-weight:500;}
   .navLabel{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
     color:var(--muted);padding:16px 12px 6px;}
+  .navBadge{display:none;min-width:18px;height:18px;padding:0 5px;border-radius:980px;
+    background:var(--blue);color:#fff;font-size:11px;font-weight:700;align-items:center;justify-content:center;flex:0 0 auto;}
+  .bigBtn:disabled{opacity:.5;cursor:default;filter:none;transform:none;}
   .main{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;padding:24px 16px 60px;}
   .main-inner{width:100%;max-width:600px;}
   .backdrop{display:none;}
@@ -299,7 +307,8 @@
           </div>
           <div class="homeStudy" id="homeStudy"></div>
           <div class="homeBtns">
-            <button class="bigBtn primary" onclick="selectFilter({type:'all'})">▶︎ Start rapid · toate cursurile</button>
+            <button class="bigBtn primary" id="homeSrsBtn" onclick="startSRS()">🧠 Repetiție inteligentă (<span id="homeSrsCount">0</span>)</button>
+            <button class="bigBtn ghost" onclick="selectFilter({type:'all'})">▶︎ Start rapid · toate cursurile</button>
             <button class="bigBtn ghost" onclick="openCombine()">🎚️ Combină cursuri</button>
             <button class="bigBtn ghost" id="homeReviewBtn" style="display:none" onclick="startReview()">⚑ Exersează greșelile (<span id="homeMCount">0</span>)</button>
           </div>
@@ -392,6 +401,46 @@ function updateMistakeBtn(){
   const c2=document.getElementById("mCount2");if(c2)c2.textContent=n;
 }
 
+// ---------- spaced repetition (SRS) ----------
+const SKEY="derm_srs_v1";
+const DAY=86400000;
+const SRS_INT=[10*60000,1*DAY,2*DAY,4*DAY,8*DAY,16*DAY,30*DAY]; // interval by box 0..6
+const NEW_PER_SESSION=20;
+let srs={};
+function loadSrs(){try{srs=JSON.parse(localStorage.getItem(SKEY))||{};}catch(e){srs={};}}
+function saveSrs(){try{localStorage.setItem(SKEY,JSON.stringify(srs));}catch(e){}}
+function scheduleCard(file,ok){
+  const now=Date.now();
+  let c=srs[file]||{box:0,reps:0,lapses:0};
+  if(ok)c.box=Math.min(c.box+1,SRS_INT.length-1);
+  else{c.box=Math.max(0,c.box-2);c.lapses=(c.lapses||0)+1;}
+  c.reps=(c.reps||0)+1;c.last=now;c.due=now+SRS_INT[c.box];
+  srs[file]=c;saveSrs();
+}
+function dueList(){const now=Date.now();return Object.keys(srs).filter(f=>srs[f].due<=now)
+  .map(f=>manifest.find(m=>m.file===f)).filter(Boolean).sort((a,b)=>srs[a.file].due-srs[b.file].due);}
+function newList(){return manifest.filter(m=>!srs[m.file]);}
+function srsTodayCount(){return dueList().length+Math.min(newList().length,NEW_PER_SESSION);}
+function masteredCount(){return Object.values(srs).filter(c=>c.box>=5).length;}
+function updateSrsUI(){
+  const n=srsTodayCount();
+  const hc=document.getElementById("homeSrsCount");if(hc)hc.textContent=n;
+  const hb=document.getElementById("homeSrsBtn");if(hb)hb.disabled=n===0;
+  const sb=document.getElementById("srsBadge");if(sb){sb.textContent=n;sb.style.display=n?"inline-flex":"none";}
+  const hm=document.getElementById("homeMastered");
+  if(hm){const mm=masteredCount();hm.textContent=mm;hm.parentElement.style.display=mm?"":"none";}
+}
+function startSRS(){
+  const due=dueList();
+  const newB=shuffle(newList()).slice(0,NEW_PER_SESSION);
+  const order=[...due,...newB];
+  if(order.length===0){alert("Ești la zi! 🎉 Nimic de repetat acum — revino mai târziu.");return;}
+  mode="srs";score={correct:0,total:0};
+  pool=order.slice().reverse(); // pop() serves most-overdue due first, then new cards
+  sessionTotal=pool.length;
+  closeSidebar();hideScreens();nextCard();
+}
+
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function shortCourse(n){return n.replace(/^Cursul\s*/i,"");}
 function courseNum(n){const m=n.match(/Cursul\s*(\d+)/i);return m?parseInt(m[1],10):999;}
@@ -431,6 +480,9 @@ function makeAction(label,onclick){
 function buildSidebar(){
   const nav=document.getElementById('nav');nav.innerHTML='';
   nav.appendChild(makeAction('🏠 Acasă',showHome));
+  const srsA=makeAction('🧠 Repetiție inteligentă',startSRS);
+  srsA.innerHTML+='<span id="srsBadge" class="navBadge"></span>';
+  nav.appendChild(srsA);
   nav.appendChild(makeAction('🎚️ Combină cursuri',openCombine));
   const sep=document.createElement('div');sep.style.cssText='height:1px;background:var(--line);margin:8px 10px;';
   nav.appendChild(sep);
@@ -553,10 +605,12 @@ function showHome(){
   document.getElementById("stCourses").textContent=new Set(manifest.map(m=>m.course)).size;
   document.getElementById("stDx").textContent=new Set(manifest.map(m=>m.disease)).size;
   const totalMin=sortedCourses().reduce((s,c)=>s+studyMinutes(c),0);
-  document.getElementById("homeStudy").innerHTML=`⏱ ${fmtTime(totalMin)} de studiu estimat`;
+  const mm=masteredCount();
+  document.getElementById("homeStudy").innerHTML=`⏱ ${fmtTime(totalMin)} de studiu estimat`+(mm?` · 🌟 ${mm} stăpânite`:"");
   const rb=document.getElementById("homeReviewBtn");
   rb.style.display=mCount()?"block":"none";
   document.getElementById("homeMCount").textContent=mCount();
+  updateSrsUI();
   document.querySelectorAll(".navItem").forEach(b=>b.classList.remove("active"));
   document.getElementById("home").style.display="block";
 }
@@ -662,6 +716,7 @@ function answer(btn,chosen){
       chosen:chosen,count:((ex&&ex.count)||0)+1,confused:confused,ts:Date.now()};
     saveMistakes();updateMistakeBtn();
   }
+  scheduleCard(current.file,chosen===correct);updateSrsUI();
   document.getElementById("descText").textContent=current.description||"—";
   document.getElementById("panel").style.display="block";
   document.getElementById("nextBtn").style.display="block";
@@ -759,12 +814,13 @@ function clearMistakes(){
 document.getElementById("nextBtn").onclick=nextCard;
 document.getElementById("cardImg").addEventListener("load",function(){this.classList.add("loaded");});
 
-loadMistakes();updateMistakeBtn();
+loadMistakes();loadSrs();updateMistakeBtn();
 fetch("manifest.json?v="+Date.now()).then(r=>r.json()).then(data=>{
   manifest=data;buildSidebar();showHome();
 }).catch(err=>{
   document.getElementById("scopeTitle").textContent="Eroare la încărcarea manifest.json";
 });
+if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}
 </script>
 </body>
 </html>
