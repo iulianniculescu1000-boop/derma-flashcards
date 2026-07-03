@@ -36,7 +36,7 @@
     "label": "Acnee papulo- pustuloasă",
     "caption": "Se observă papule eritematoase și pustule multiple de dimensiuni variabile — acnee papulo- pustuloasă.",
     "needs_label": false,
-    "disease": "Acnee papulo-pustuloasă",
+    "disease": "Acnee nodulo-chistică",
     "description": "La nivelul obrazului se observă noduli și chisturi inflamatorii confluente, cu suprafață crustoasă și exsudativă — acnee nodulo-chistică severă."
   },
   {
@@ -137,7 +137,7 @@
     "caption": "",
     "needs_label": true,
     "disease": "Herpes simplex",
-    "description": "La nivelul mucoasei bucale, buzelor si limbii se observa pustule si vezicule grupate cu eroziuni acoperite de cruste — gingivostomatita herpetica primara (HSV-1). La nivelul buzei superioare se observa pustule grupate pe baza eritematoasa cu eroziuni in vindecare cu cruste si edem lateral — herpes labial recurent unilateral."
+    "description": "La nivelul mucoasei bucale, buzelor si limbii se observa pustule si vezicule grupate cu eroziuni acoperite de cruste — gingivostomatita herpetica primara (HSV-1)."
   },
   {
     "course": "Cursul 2-Infectii virale",
@@ -927,7 +927,7 @@
     "caption": "",
     "needs_label": false,
     "disease": "Pitiriazis versicolor",
-    "description": "La nivelul toracelui posterior se observă multiple macule albe (formă acromică) cu tendință la confluare în placarde policiclice — pitiriazis versicolor formă acromică. La nivelul regiunii cervicale laterale se observă multiple macule discret eritematoase care confluează în plăci policiclice cu suprafață mată — pitiriazis versicolor formă eritematoasă."
+    "description": "La nivelul toracelui posterior se observă multiple macule albe (formă acromică) cu tendință la confluare în placarde policiclice — pitiriazis versicolor formă acromică."
   },
   {
     "course": "Cursul 4-Infectii Micotice",
@@ -1046,7 +1046,7 @@
     "label": "Pediculoza capitis (paraziți și lindeni pe firul de păr)",
     "caption": "• Malathion 0,5–1% — inhibitor al acetilcolinesterazei; acțiune ovocidă; contact minim 12 h; protecție prelungită împotriva reinfecției (> 6 săptămâni). • Carbaryl — similar malathionului, acțiune ovocidă. • Piretrine (insecticide naturale) și Permetrina (piretroid sintetic) — pediculocide și ovocide • Crotamiton topic — util pentru pediculoza capului.",
     "needs_label": false,
-    "disease": "Pediculoză capitis",
+    "disease": "Pediculoză corporis",
     "description": "La nivelul regiunii dorso-lombare și fesiere se observă un polimorfism lezional dominat de numeroase excoriații liniare și punctiforme acoperite de cruste hematice, hiperpigmentare reziduală (melanodermie pediculozică) și lichenificare — tablou specific infestării cronice cu *P. h. corporis*."
   },
   {
@@ -1056,7 +1056,7 @@
     "label": "Pediculoza corporis cronică (melanodermie pediculozică)",
     "caption": "C) Tratament • Lindan 1% pudră sau loțiune — cel mai utilizat. • Malathion 0,5–1% — inhibitor al acetilcolinesterazei; acțiune ovocidă; contact minim 12 h; protecție prelungită împotriva reinfecției (> 6 săptămâni). • Carbaryl — similar malathionului, acțiune ovocidă. • Piretrine (insecticide naturale) și Permetrina (piretroid sintetic) — pediculocide și ovocide eficace. • Crotamiton topic — util pentru pediculoza capului.",
     "needs_label": false,
-    "disease": "Pediculoză corporis",
+    "disease": "Pediculoză capitis",
     "description": "Se observă un ectoparazit (*Pediculus humanus*) ancorat pe firul de păr la bază (marcat de săgețile negre), alături de multiple formațiuni ovalare milimetrice cenușii reprezentând ouăle (lindenii) parazitului."
   },
   {
@@ -1406,7 +1406,7 @@
     "label": "Angioedem (labial)",
     "caption": "Se observă edem nedepresibil alb-roz prin jumătății nivelul la hipodermului infiltrarea inferioare a feței, cu accent pe buza inferioară, cu limite imprecise, tegument supraiacent lucios, eritematos și neted, aspect de angioedem acut.",
     "needs_label": false,
-    "disease": "Angioedem",
+    "disease": "Urticarie cronică spontană",
     "description": "Se observă plăci eritemato-edematoase proeminente, reliefate, polimorfice, inelare și policiclice, pe regiunea posterioară a trunchiului, gâtului și interscapular, cu suprafață netedă bine delimitată și tegument adiacent indemn."
   },
   {
@@ -1416,7 +1416,7 @@
     "label": "Urticarie cronică spontană (regiune cervicală/interscapulară)",
     "caption": "eritemato-edematoase plăci observă Se proeminente, reliefate, cu suprafață netedă, bine delimitate cu margini nete supradenivelate, de și inelare polimorfice, roz-roșu, culoare policiclice, pe regiunea laterală a trunchiului, cu tegument adiacent indemn.",
     "needs_label": false,
-    "disease": "Urticarie cronică spontană",
+    "disease": "Angioedem",
     "description": "Se observă edem masiv alb-roz, nedepresibil, la nivelul regiunii palpebrale (dermatoclazie), malare și piramidei nazale, cu limite imprecise, simetric, pleoape destinse, lucioase și netede, tegument din jur indemn, aspect de angioedem facial sever."
   },
   {
@@ -1427,7 +1427,7 @@
     "caption": "aparent  normală.  Sunt  foarte  fragile,  se  rup  şi  lasă  eroziuni  mărginite  de lambouri  epidermice  decolate  care  se  vindecă  lent.  Leziunile  sunt nepruriginoase şi se distribuie predominant pe zonele de presiune. A) TABLOU CLINIC • Debut: eroziuni bucale dureroase, trenante, pe fața internă a obrajilor, palat, gingii; eroziunile au fundul roşu-viu şi sunt uneori mărginite de un gulerastr epidermic • Faza generalizată: bule cu lichid clar pe piele aparent normală, foarte fragile; prin rupere lasă eroziuni cu lambouri epidermice decolate, cu vindecare lentă • Leziuni nepruriginoase, distribuite predominant pe zonele de presiune • Semnul Nikolsky pozitiv: aplicarea unei presiuni moderate pe pielea fără bule induce noi leziuni buloase — evidentiind o mare epidermofragilitate",
     "needs_label": false,
     "disease": "Pemfigus vulgar",
-    "description": "La nivelul regiunii bucale se observă eroziuni cu fundul roşu-viu, mărginite de lambouri epidermice decolate (gulerastr epidermic) — leziunea inițială clasică în pemfigus vulgar."
+    "description": "Pe piele aparent normală se observă un singur lambou epidermic decolat (gulerastr epidermic), rest al unei bule fragile rupte — leziune de pemfigus vulgar."
   },
   {
     "course": "Cursul 8-Afectiuni Buloase",
@@ -1777,7 +1777,7 @@
     "caption": "",
     "needs_label": false,
     "disease": "Chist trichilemal (pilar)",
-    "description": "La nivelul scalpului se observă un chist rotund, mobil, ferm la palpare — chist trichilemale multiplu pe scalp."
+    "description": "La nivelul scalpului se observă un chist rotund, mobil, ferm la palpare, cu suprafață netedă şi telangiectatică — chist trichilemale."
   },
   {
     "course": "Cursul 10-Tumori Benigne",
@@ -2437,7 +2437,7 @@
     "caption": "PATOGENEZĂ Limfangită și limfadenită în câmpul de drenaj al zonei de inoculare → perilimfangită și periadenită → necroză, abcese loculare, fistule și sinusuri → pe măsura remiterii infecției, fibroza înlocuiește inflamația acută → blocare drenaj limfatic, edem cronic, stricturi. TABLOU CLINIC • Leziune primară: veziculă mică și indoloră sau ulcerație/papulă fără indurație pe penis sau vulvă; se vindecă în câteva zile; uneori uretrită nespecifică sau eroziuni herpetiforme • Sindrom inghinal: limfadenopatii inghinale dureroase la 2-6 săptămâni după expunere; unilateral în 2/3 din cazuri; ganglioni inițial discreți → periadenită progresivă → formațiuni fluctuante cu fistule; semnul jgheabului — mărire extensivă a ganglionilor deasupra și dedesubtul ligamentului Poupart; bubon unilateral (prezentarea cea mai frecventă); în 75% din cazuri sunt afectați și ganglionii iliaci profunzi • Sindrom ano-genito-rectal (MSM/femei): proctocolită, hiperplazie a țesutului limfatic perirectal; limforoizi (aspect de hemoroizi) sau condiloame perianale • Estiomen: elefantiazis al organelor genitale (de obicei la femei), cu ulcerații, apare la 1-20 ani după infecție • Eritem nodos în 10% din cazuri",
     "needs_label": false,
     "disease": "Limfogranulomatoză veneriană (LGV)",
-    "description": "Se observă o limfadenopatie voluminoasă ce implică ganglionii femurali și inghinali drept, separați de un jgheab corespunzând ligamentului Poupart — semnul jgheabului în limfogranulomatoza veneriană."
+    "description": "Se observă o leziune primară localizată (papulă/ulcerație mică) în regiunea inghino-genitală, fără indurație — leziune primară de limfogranulomatoză veneriană (LGV)."
   },
   {
     "course": "Cursul 12-BTS",
