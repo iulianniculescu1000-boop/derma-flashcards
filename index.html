@@ -243,27 +243,59 @@
   .cmbCheck{position:absolute;top:11px;right:11px;width:20px;height:20px;border-radius:50%;
     background:var(--blue);color:#fff;font-size:12px;display:none;align-items:center;justify-content:center;}
   .cmbCard.sel .cmbCheck{display:flex;}
-  .cmbFooter{display:flex;align-items:center;gap:12px;}
+  .cmbFooter{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
   .cmbCount{flex:1;font-size:14px;font-weight:600;color:var(--muted);}
-  .cmbFooter .bigBtn{margin-bottom:0;width:auto;padding:13px 26px;}
+  .cmbActions{display:flex;gap:10px;}
+  .cmbActions .bigBtn{margin-bottom:0;flex:1;padding:13px 10px;}
   .linkBtn{background:none;border:none;color:var(--blue);font-size:13px;font-weight:600;
     cursor:pointer;font-family:inherit;margin-top:12px;padding:4px;}
 
   /* gallery (browse a single disease) */
   #gallery{animation:pop .35s cubic-bezier(.2,.8,.2,1);}
-  .galHead{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .galHead{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
   .galTitle{font-size:22px;font-weight:800;letter-spacing:-.02em;}
   .galSub{font-size:13px;color:var(--muted);margin-top:2px;}
   .galHead .spacer{flex:1;}
+  .galBtns{display:flex;gap:8px;flex:0 0 auto;}
   .galTest{background:var(--blue);color:#fff;border:none;border-radius:980px;padding:10px 18px;
     font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;flex:0 0 auto;transition:filter .15s;}
   .galTest:hover{filter:brightness(1.06);}
+  .galExam{background:#f0f0f3;color:var(--ink);border:none;border-radius:980px;padding:10px 18px;
+    font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;flex:0 0 auto;transition:background .15s;}
+  .galExam:hover{background:#e7e7ea;}
   .galItem{background:var(--card);border-radius:20px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:16px;
     opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s cubic-bezier(.2,.8,.2,1);}
   .galItem.in{opacity:1;transform:none;}
   .galImg{width:100%;aspect-ratio:4/3;background:#f2f2f4;display:flex;align-items:center;justify-content:center;}
   .galImg img{width:100%;height:100%;object-fit:contain;}
   .galDesc{padding:14px 16px 16px;font-size:15px;line-height:1.5;color:var(--ink);}
+
+  /* exam mode (flip flashcards) */
+  #examCard{animation:pop .35s cubic-bezier(.2,.8,.2,1);}
+  .examWrap{perspective:1600px;margin-bottom:16px;cursor:pointer;}
+  .examInner{position:relative;width:100%;height:min(58vh,460px);transition:transform .5s cubic-bezier(.3,.8,.3,1);
+    transform-style:preserve-3d;}
+  .examInner.flipped{transform:rotateY(180deg);}
+  .examFace{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    border-radius:22px;box-shadow:var(--shadow);overflow:hidden;}
+  .examFront{background:#000;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);}
+  .examFront img{width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity .4s ease;}
+  .examFront img.loaded{opacity:1;}
+  .examBack{background:var(--card);transform:rotateY(180deg);padding:22px;display:flex;flex-direction:column;
+    overflow-y:auto;border:1px solid var(--line);}
+  .examBackLbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px;}
+  .examBackDx{font-size:23px;font-weight:800;letter-spacing:-.02em;color:var(--blue);margin-bottom:16px;line-height:1.25;}
+  .examBackDesc{font-size:15.5px;line-height:1.55;color:var(--ink);}
+  .examHint{text-align:center;color:var(--muted);font-size:13px;font-weight:500;margin-bottom:16px;}
+  .examGrade{display:none;gap:10px;margin-bottom:16px;}
+  .gradeBtn{flex:1;padding:15px;border-radius:16px;border:none;font-size:16px;font-weight:700;
+    cursor:pointer;font-family:inherit;transition:filter .15s,transform .06s;}
+  .gradeBtn:active{transform:scale(.98);}
+  .gradeBtn.no{background:var(--red-tint);color:#c11a10;}
+  .gradeBtn.no:hover{filter:brightness(.98);background:#fbdedb;}
+  .gradeBtn.yes{background:var(--green-tint);color:#0f7a33;}
+  .gradeBtn.yes:hover{background:#d9f3e3;}
+  .examSrcInfo{color:var(--muted);font-size:12px;text-align:center;}
 
   /* mobile: sidebar becomes a slide-in drawer */
   @media(max-width:900px){
@@ -307,8 +339,9 @@
           </div>
           <div class="homeStudy" id="homeStudy"></div>
           <div class="homeBtns">
+            <button class="bigBtn primary" onclick="startExam()">🎓 Mod examen · flashcards</button>
             <button class="bigBtn primary" id="homeSrsBtn" onclick="startSRS()">🧠 Repetiție inteligentă (<span id="homeSrsCount">0</span>)</button>
-            <button class="bigBtn ghost" onclick="selectFilter({type:'all'})">▶︎ Start rapid · toate cursurile</button>
+            <button class="bigBtn ghost" onclick="selectFilter({type:'all'})">📝 Exersare (grilă) · toate cursurile</button>
             <button class="bigBtn ghost" onclick="openCombine()">🎚️ Combină cursuri</button>
             <button class="bigBtn ghost" id="homeReviewBtn" style="display:none" onclick="startReview()">⚑ Exersează greșelile (<span id="homeMCount">0</span>)</button>
           </div>
@@ -325,7 +358,10 @@
         <div class="cmbGrid" id="cmbGrid"></div>
         <div class="cmbFooter">
           <span id="cmbCount" class="cmbCount">0 cursuri · 0 poze</span>
-          <button class="bigBtn primary" id="cmbStart" onclick="startCombine()" disabled>Începe</button>
+        </div>
+        <div class="cmbActions">
+          <button class="bigBtn ghost" id="cmbExamStart" onclick="startExamCombine()" disabled>🎓 Examen</button>
+          <button class="bigBtn primary" id="cmbStart" onclick="startCombine()" disabled>📝 Grilă</button>
         </div>
         <button class="linkBtn" id="cmbAll" onclick="toggleAllCombine()">Selectează tot</button>
       </div>
@@ -334,7 +370,10 @@
         <div class="galHead">
           <div><div class="galTitle" id="galTitle"></div><div class="galSub" id="galCount"></div></div>
           <div class="spacer"></div>
-          <button class="galTest" id="galTestBtn" onclick="quizCourseOfGallery()">Testează cursul ▶︎</button>
+          <div class="galBtns">
+            <button class="galExam" onclick="examThisGallery()">🎓 Examen</button>
+            <button class="galTest" id="galTestBtn" onclick="quizCourseOfGallery()">Testează cursul ▶︎</button>
+          </div>
         </div>
         <div id="galBody"></div>
       </div>
@@ -355,6 +394,25 @@
         </div>
         <button id="nextBtn">Următoarea</button>
         <div id="srcInfo"></div>
+      </div>
+      <div id="examCard" style="display:none">
+        <div class="examWrap" onclick="flipExam()">
+          <div class="examInner" id="examInner">
+            <div class="examFace examFront"><img id="examImg" src="" alt="imagine clinică"></div>
+            <div class="examFace examBack">
+              <div class="examBackLbl">Diagnostic</div>
+              <div class="examBackDx" id="examDx"></div>
+              <div class="examBackLbl">Descrierea leziunii</div>
+              <div class="examBackDesc" id="examDesc"></div>
+            </div>
+          </div>
+        </div>
+        <div class="examHint" id="examHint">👆 Atinge poza pentru a vedea diagnosticul</div>
+        <div class="examGrade" id="examGrade">
+          <button class="gradeBtn no" onclick="gradeExam(false)">✕ Nu am știut</button>
+          <button class="gradeBtn yes" onclick="gradeExam(true)">✓ Am știut</button>
+        </div>
+        <div class="examSrcInfo" id="examSrcInfo"></div>
       </div>
       <div id="empty" style="display:none">Nicio imagine pentru selecția aleasă.</div>
 
@@ -441,6 +499,26 @@ function startSRS(){
   closeSidebar();hideScreens();nextCard();
 }
 
+// ---------- exam mode (flip flashcards, no multiple choice) ----------
+let examSetCache=null;
+function startExam(setArr,title){
+  mode="exam";score={correct:0,total:0};
+  examSetCache=(setArr||manifest.slice());
+  pool=shuffle(examSetCache);
+  sessionTotal=pool.length;
+  document.getElementById('scopeTitle').textContent=title||'Mod examen';
+  document.querySelectorAll(".navItem").forEach(b=>b.classList.remove("active"));
+  closeSidebar();hideScreens();nextCard();
+}
+function startExamCombine(){
+  if(combineSel.size<1)return;
+  filter={type:"combine",courses:[...combineSel]};
+  startExam(currentSet(),'Mod examen · '+scopeLabel());
+}
+function examThisGallery(){
+  startExam(currentSet(),'Mod examen · '+filter.disease);
+}
+
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function shortCourse(n){return n.replace(/^Cursul\s*/i,"");}
 function courseNum(n){const m=n.match(/Cursul\s*(\d+)/i);return m?parseInt(m[1],10):999;}
@@ -480,6 +558,7 @@ function makeAction(label,onclick){
 function buildSidebar(){
   const nav=document.getElementById('nav');nav.innerHTML='';
   nav.appendChild(makeAction('🏠 Acasă',showHome));
+  nav.appendChild(makeAction('🎓 Mod examen',()=>startExam()));
   const srsA=makeAction('🧠 Repetiție inteligentă',startSRS);
   srsA.innerHTML+='<span id="srsBadge" class="navBadge"></span>';
   nav.appendChild(srsA);
@@ -583,7 +662,7 @@ function updateScore(){
   const done=sessionTotal-pool.length;
   document.getElementById("progBar").style.width=sessionTotal?(done/sessionTotal*100)+"%":"0%";
 }
-function hideScreens(){["home","combine","gallery","card","empty","finish","mistakes"].forEach(id=>document.getElementById(id).style.display="none");}
+function hideScreens(){["home","combine","gallery","card","examCard","empty","finish","mistakes"].forEach(id=>document.getElementById(id).style.display="none");}
 
 // accent colors only; pale backgrounds + tinted ink are derived via color-mix
 const PALETTE=['#ff7a86','#ff9f45','#e7b008','#54c98a','#20bcac','#3fb0ef','#5b8def','#8a7bf0','#b06cf0','#ec6fa6','#b08968'];
@@ -643,6 +722,7 @@ function updateCombineFooter(){
   const nImgs=manifest.filter(m=>combineSel.has(m.course)).length;
   document.getElementById("cmbCount").textContent=`${combineSel.size} cursuri · ${nImgs} poze`;
   document.getElementById("cmbStart").disabled=combineSel.size<1;
+  document.getElementById("cmbExamStart").disabled=combineSel.size<1;
   const total=new Set(manifest.map(m=>m.course)).size;
   document.getElementById("cmbAll").textContent=combineSel.size===total?"Deselectează tot":"Selectează tot";
 }
@@ -665,10 +745,15 @@ function nextCard(){
     showFinish();return;
   }
   hideScreens();setChrome(true);
+  current=pool.pop();
+  if(mode==="exam"){showExamCard();}else{showQuizCard();}
+  updateScore();
+}
+
+function showQuizCard(){
   document.getElementById("card").style.display="block";
   const card=document.getElementById("card");card.style.animation="none";void card.offsetWidth;card.style.animation="";
 
-  current=pool.pop();
   const ci=document.getElementById("cardImg");ci.classList.remove("loaded");ci.src=current.file;
   document.getElementById("srcInfo").textContent=`${current.course} · pagina ${current.page}`;
 
@@ -692,6 +777,38 @@ function nextCard(){
     b.onclick=()=>answer(b,d);optsDiv.appendChild(b);
   });
   updateScore();
+}
+
+function showExamCard(){
+  document.getElementById("examCard").style.display="block";
+  const wrap=document.getElementById("examCard");wrap.style.animation="none";void wrap.offsetWidth;wrap.style.animation="";
+
+  document.getElementById("examInner").classList.remove("flipped");
+  const img=document.getElementById("examImg");img.classList.remove("loaded");img.src=current.file;
+  document.getElementById("examDx").textContent=current.disease;
+  document.getElementById("examDesc").textContent=current.description||"—";
+  document.getElementById("examSrcInfo").textContent=`${current.course} · pagina ${current.page}`;
+  document.getElementById("examHint").style.display="block";
+  document.getElementById("examGrade").style.display="none";
+}
+function flipExam(){
+  const inner=document.getElementById("examInner");
+  const flipped=inner.classList.toggle("flipped");
+  document.getElementById("examHint").style.display=flipped?"none":"block";
+  document.getElementById("examGrade").style.display=flipped?"flex":"none";
+}
+function gradeExam(ok){
+  score.total++;if(ok)score.correct++;
+  if(ok){
+    if(mistakes[current.file]){delete mistakes[current.file];saveMistakes();updateMistakeBtn();}
+  }else{
+    const ex=mistakes[current.file];
+    mistakes[current.file]={file:current.file,disease:current.disease,course:current.course,page:current.page,
+      chosen:"nu am știut (autoevaluare)",count:((ex&&ex.count)||0)+1,confused:Object.assign({},ex&&ex.confused),ts:Date.now()};
+    saveMistakes();updateMistakeBtn();
+  }
+  scheduleCard(current.file,ok);updateSrsUI();
+  nextCard();
 }
 
 function answer(btn,chosen){
@@ -740,7 +857,13 @@ function showFinish(){
   requestAnimationFrame(()=>requestAnimationFrame(()=>{fg.style.strokeDashoffset=327-327*pct/100;}));
 }
 
-function restart(){resetAndStart();}
+function restart(){
+  if(mode==="exam"){
+    score={correct:0,total:0};pool=shuffle(examSetCache||manifest.slice());sessionTotal=pool.length;nextCard();
+  }else{
+    resetAndStart();
+  }
+}
 function startReview(){
   if(mCount()===0)return;
   mode="review";score={correct:0,total:0};
@@ -795,16 +918,16 @@ function renderMistakes(){
 }
 let lastScreen="card";
 function openMistakes(){
-  ["home","card","finish","empty"].forEach(id=>{if(document.getElementById(id).style.display==="block")lastScreen=id;});
+  ["home","card","examCard","finish","empty"].forEach(id=>{if(document.getElementById(id).style.display==="block")lastScreen=id;});
   hideScreens();setChrome(false);renderMistakes();updateMistakeBtn();
   document.getElementById("mistakes").style.display="block";
 }
 function closeMistakes(){
   hideScreens();
   if(lastScreen==="home"){showHome();return;}
-  const chrome=(lastScreen==="card"||lastScreen==="finish");
+  const chrome=(lastScreen==="card"||lastScreen==="examCard"||lastScreen==="finish");
   setChrome(chrome);
-  const target=(lastScreen==="finish"||lastScreen==="empty")?lastScreen:(current?"card":null);
+  const target=(lastScreen==="finish"||lastScreen==="empty")?lastScreen:(current?(mode==="exam"?"examCard":"card"):null);
   if(target)document.getElementById(target).style.display="block";else showHome();
 }
 function clearMistakes(){
@@ -813,6 +936,7 @@ function clearMistakes(){
 }
 document.getElementById("nextBtn").onclick=nextCard;
 document.getElementById("cardImg").addEventListener("load",function(){this.classList.add("loaded");});
+document.getElementById("examImg").addEventListener("load",function(){this.classList.add("loaded");});
 
 loadMistakes();loadSrs();updateMistakeBtn();
 fetch("manifest.json?v="+Date.now()).then(r=>r.json()).then(data=>{
