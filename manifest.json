@@ -1386,7 +1386,7 @@
     "label": "Urticarie cronică spontană (aspect policiclic)",
     "caption": "",
     "needs_label": false,
-    "disease": "Urticarie cronică spontană",
+    "disease": "Angioedem",
     "description": "Se observă plăci eritemato-edematoase proeminente, reliefate, cu suprafață netedă, bine delimitate cu margini nete supradenivelate, de culoare roz-roșu, polimorfice, inelare și policiclice, pe regiunea laterală a trunchiului, cu tegument adiacent indemn."
   },
   {
@@ -1406,7 +1406,7 @@
     "label": "Angioedem (labial)",
     "caption": "Se observă edem nedepresibil alb-roz prin jumătății nivelul la hipodermului infiltrarea inferioare a feței, cu accent pe buza inferioară, cu limite imprecise, tegument supraiacent lucios, eritematos și neted, aspect de angioedem acut.",
     "needs_label": false,
-    "disease": "Urticarie cronică spontană",
+    "disease": "Angioedem",
     "description": "Se observă plăci eritemato-edematoase proeminente, reliefate, polimorfice, inelare și policiclice, pe regiunea posterioară a trunchiului, gâtului și interscapular, cu suprafață netedă bine delimitată și tegument adiacent indemn."
   },
   {
