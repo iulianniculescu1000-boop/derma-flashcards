@@ -739,6 +739,13 @@ function startCombine(){
   resetAndStart();
 }
 
+// which format to show the current card in:
+// exam mode → always flip; review mode → the format the card was missed in; else grilă
+function cardIsExam(){
+  if(mode==="exam")return true;
+  if(mode==="review")return ((mistakes[current&&current.file]||{}).srcMode==="exam");
+  return false;
+}
 function nextCard(){
   if(pool.length===0){
     if(score.total===0){hideScreens();setChrome(false);document.getElementById("empty").style.display="block";return;}
@@ -746,7 +753,7 @@ function nextCard(){
   }
   hideScreens();setChrome(true);
   current=pool.pop();
-  if(mode==="exam"){showExamCard();}else{showQuizCard();}
+  if(cardIsExam()){showExamCard();}else{showQuizCard();}
   updateScore();
 }
 
@@ -804,7 +811,7 @@ function gradeExam(ok){
   }else{
     const ex=mistakes[current.file];
     mistakes[current.file]={file:current.file,disease:current.disease,course:current.course,page:current.page,
-      chosen:"nu am știut (autoevaluare)",count:((ex&&ex.count)||0)+1,confused:Object.assign({},ex&&ex.confused),ts:Date.now()};
+      chosen:"nu am știut (autoevaluare)",count:((ex&&ex.count)||0)+1,confused:Object.assign({},ex&&ex.confused),srcMode:"exam",ts:Date.now()};
     saveMistakes();updateMistakeBtn();
   }
   scheduleCard(current.file,ok);updateSrsUI();
@@ -830,7 +837,7 @@ function answer(btn,chosen){
     const confused=Object.assign({},ex&&ex.confused);
     confused[chosen]=(confused[chosen]||0)+1;
     mistakes[current.file]={file:current.file,disease:correct,course:current.course,page:current.page,
-      chosen:chosen,count:((ex&&ex.count)||0)+1,confused:confused,ts:Date.now()};
+      chosen:chosen,count:((ex&&ex.count)||0)+1,confused:confused,srcMode:"quiz",ts:Date.now()};
     saveMistakes();updateMistakeBtn();
   }
   scheduleCard(current.file,chosen===correct);updateSrsUI();
